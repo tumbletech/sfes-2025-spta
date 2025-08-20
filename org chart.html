@@ -1,0 +1,79 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SFES SPTA Organizational Chart</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body{font-family:system-ui, sans-serif; background:#f7f8fa}
+    .card{border-radius:1rem; border:0; box-shadow:0 8px 20px rgba(0,0,0,.05)}
+    .org-portrait{
+      width:100px; height:100px; border-radius:50%;
+      background:#eef5ff; display:flex; align-items:center; justify-content:center;
+      font-size:2rem; font-weight:700; color:#0d6efd;
+      transition: transform .2s, box-shadow .2s;
+      cursor:pointer;
+    }
+    .org-portrait:hover{
+      transform:scale(1.1);
+      box-shadow:0 4px 15px rgba(0,0,0,.15);
+    }
+    .collapse-inner{margin-top:1rem}
+  </style>
+</head>
+<body>
+  <header class="bg-white border-bottom sticky-top">
+    <div class="container py-2 d-flex align-items-center justify-content-between">
+      <div class="fw-bold">SFES SPTA</div>
+      <div class="small text-muted">Organizational Chart</div>
+    </div>
+  </header>  <main class="container py-4">
+    <h1 class="h4 mb-4">SPTA Organizational Chart (School Year 2025–2026)</h1><h2 class="h5 mb-3">Officers</h2>
+<div class="row g-4" id="officersChart"></div>
+
+<h2 class="h5 mt-5 mb-3">Board of Directors</h2>
+<div class="row g-4" id="bodsChart"></div>
+
+  </main>  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>  <script>
+    const officers = [
+      {id:'pres', name:'Joven Moralejo', role:'President', projects:['Water Tank Automation','Math & Reading Development','Proposed Multilevel Overpass with Elevator and Escalator'], initials:'JM'},
+      {id:'vp', name:'Grace Echavia', role:'Vice President', projects:['Gardening Promotion','Elevated Track and Field'], initials:'GE'},
+      {id:'sec', name:'Maibel Ostinal', role:'Secretary', projects:['Mini-Libraries','Board Games Initiative','Online Library with Interactive Science Lab'], initials:'MO'},
+      {id:'tre', name:'Leizelyn Agoy-Agoy', role:'Treasurer', projects:['Stage Plays Revival','Collections Compliance','Proposed Sports Hall'], initials:'LA'}
+    ];
+
+    const bods = [
+      {id:'bod1', name:'Riza Obsequio', role:'Board of Director', projects:['Board Games','Assist: Sports Hall'], initials:'RO'},
+      {id:'bod2', name:'Donnabel Lavides', role:'Board of Director', projects:['Mini-Libraries','General Mariano Trias Library'], initials:'DL'},
+      {id:'bod3', name:'Pedro Siervo, Jr', role:'Board of Director', projects:['Catwalk Repair','Assist: Overpass Logistics'], initials:'PS'},
+      {id:'bod4', name:'Jennifer Ferrancol', role:'Board of Director', projects:['Math & Reading','Assist: Online Library'], initials:'JF'},
+      {id:'bod5', name:'Dana Pascual', role:'Board of Director', projects:['Catwalk Repair','Assist: Elevated Track & Field'], initials:'DP'}
+    ];
+
+    function renderGroup(data, targetId){
+      const grid=document.getElementById(targetId);
+      data.forEach(o=>{
+        const col=document.createElement('div');
+        col.className='col-12 col-sm-6 col-lg-3';
+        col.innerHTML=`
+          <div class="card p-3 text-center h-100">
+            <div class="org-portrait mx-auto mb-2" data-bs-toggle="collapse" data-bs-target="#col-${o.id}" aria-expanded="false">${o.initials}</div>
+            <div class="collapse" id="col-${o.id}">
+              <div class="collapse-inner">
+                <h6 class="mb-1">${o.name}</h6>
+                <div class="text-muted small mb-2">${o.role}</div>
+                <strong>Projects:</strong>
+                <ul class="text-start small mt-2">${o.projects.map(p=>`<li>${p}</li>`).join('')}</ul>
+              </div>
+            </div>
+          </div>`;
+        grid.appendChild(col);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded',()=>{
+      renderGroup(officers,'officersChart');
+      renderGroup(bods,'bodsChart');
+    });
+  </script></body>
+</html>
