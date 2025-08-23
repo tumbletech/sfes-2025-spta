@@ -74,7 +74,7 @@
         <a class="list-group-item list-group-item-action" href="#tab-finance"     data-bs-toggle="pill" data-bs-dismiss="offcanvas">Financials</a>
         <a class="list-group-item list-group-item-action" href="#tab-projects"    data-bs-toggle="pill" data-bs-dismiss="offcanvas">Projects</a>
         <a class="list-group-item list-group-item-action" href="#tab-log"         data-bs-toggle="pill" data-bs-dismiss="offcanvas">Transparency Log</a>
-        <a class="list-group-item list-group-item-action" href="#tab-officers"    data-bs-toggle="pill" data-bs-dismiss="offcanvas">Officers & Signatures</a>
+        <a class="list-group-item list-group-item-action" href="#tab-officers"    data-bs-toggle="pill" data-bs-dismiss="offcanvas">Officers</a>
         <a class="list-group-item list-group-item-action" href="#tab-docs"        data-bs-toggle="pill" data-bs-dismiss="offcanvas">Documents</a>
         <a class="list-group-item list-group-item-action" href="#tab-feedback"    data-bs-toggle="pill" data-bs-dismiss="offcanvas">Feedback</a>
       </div>
@@ -97,7 +97,7 @@
                 <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-finance" type="button">Financials</button>
                 <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-projects" type="button">Projects</button>
                 <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-log" type="button">Transparency Log</button>
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-officers" type="button">Officers & Signatures</button>
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-officers" type="button">Officers</button>
                 <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-docs" type="button">Documents</button>
                 <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-feedback" type="button">Feedback</button>
               </div>
@@ -248,7 +248,14 @@
           </div>
         </section>
 
-        <!-- other tab sections remain unchanged -->
+        <!-- Officers -->
+        <section class="tab-pane fade" id="tab-officers">
+          <h2 class="h5 section-title mb-3">SPTA Officers (SY 2025–2026)</h2>
+          <!-- Force 2-up on mobile, 3-up md, 4-up xl -->
+          <div class="row row-cols-2 row-cols-md-3 row-cols-xl-4 g-3" id="officersGrid"></div>
+        </section>
+
+        <!-- (You can keep other tab sections here) -->
       </main>
     </div>
   </div>
@@ -262,7 +269,7 @@
     // Simple search guard
     function doGlobalSearch(){ /* TODO: wire up actual search */ }
 
-    // --- Display data for the table (edit as needed) ---
+    // --- Resolutions (all under Proposed, titles open PDF) ---
     const resolutionsData = [
       {no:'2025-001', title:'SPTA Records Turnover Request Resolution', lead:'VP Grace Echavia', basis:'DepEd Order No. 13, s. 2022 – Sec. 7(a)'},
       {no:'2025-002', title:'Creation of a New SPTA By-Laws', lead:'VP Grace Echavia', basis:'DepEd Order No. 13, s. 2022 – Sec. 8(a–c)'},
@@ -276,8 +283,6 @@
       {no:'2025-010', title:'SPTA First 90-Day Plan', lead:'Pres. Joven Moralejo', basis:'Sec 3(b), DepEd Order No. 13, s. 2022'},
       {no:'2025-011', title:'Initial List of SPTA Projects', lead:'SPTA En Banc', basis:'2nd SPTA MOM - Item 4 '}
     ];
-
-    // Exact filenames in assets/resolutions/ (from your repo screenshot)
     const fileIndex = {
       '2025-001': 'P-SPTA Resolution 0001, S. 2025 - SPTA Records Turnover Request Resolution.pdf',
       '2025-002': 'P-SPTA Resolution 0002, S. 2025 - Creation of a New SPTA By-Laws.pdf',
@@ -291,12 +296,10 @@
       '2025-010': 'P-SPTA Resolution 0010, S. 2025 - SPTA First 90-Day Plan.pdf',
       '2025-011': 'P-SPTA Resolution 0011, S. 2025 - Initial List of SPTA Projects.pdf'
     };
-
     function pdfHref(resoNo){
       const file = fileIndex[resoNo];
       return file ? `assets/resolutions/${encodeURI(file)}` : null;
     }
-
     function populateResoTable(tableId, rows){
       const tbody = document.querySelector(`#${tableId} tbody`);
       if(!tbody) return;
@@ -307,9 +310,7 @@
       }
       rows.forEach(r=>{
         const href = pdfHref(r.no);
-        const titleHtml = href
-          ? `<a href="${href}" target="_blank" rel="noopener">${r.title}</a>`
-          : r.title;
+        const titleHtml = href ? `<a href="${href}" target="_blank" rel="noopener">${r.title}</a>` : r.title;
         tbody.insertAdjacentHTML('beforeend',
           `<tr>
             <td>${r.no}</td>
@@ -319,16 +320,50 @@
           </tr>`);
       });
     }
-
-    // Render: ALL items go to "Proposed"; others empty
     function renderResolutionTables(){
       populateResoTable('tbl-proposed', resolutionsData);
       ['tbl-review','tbl-approved','tbl-disapproved'].forEach(id => populateResoTable(id, []));
     }
 
-    document.addEventListener('DOMContentLoaded',()=>{
+    // --- Officers (cards, photos from assets/photos/officers/) ---
+    const officers = [
+      {name:'Joven Moralejo',            role:'President',           photo:'assets/photos/officers/01pres.png'},
+      {name:'Grace Echavia',             role:'Vice President',      photo:'assets/photos/officers/02vp.png'},
+      {name:'Leizelyn Agoy-Agoy',        role:'Treasurer',           photo:'assets/photos/officers/03treas.png'},
+      {name:'Maria Dela Cruz',           role:'Secretary',           photo:'assets/photos/officers/04sec.png'},
+      {name:'Riza Obsequio',             role:'Board of Director',   photo:'assets/photos/officers/05bodriza.png'},
+      {name:'Jennifer P. Ferrancol',     role:'Board of Director',   photo:'assets/photos/officers/06bodjennifer.png'},
+      {name:'Donnabel Lavides',          role:'Board of Director',   photo:'assets/photos/officers/07boddonna.png'},
+      {name:'Dahna Dale R. Pascual',     role:'Board of Director',   photo:'assets/photos/officers/08boddahna.png'},
+      {name:'Pedro L. Siervo, Jr.',      role:'Board of Director',   photo:'assets/photos/officers/08bodpedro.png'}
+    ];
+    function renderOfficers(){
+      const grid = document.getElementById('officersGrid');
+      if(!grid) return;
+      grid.innerHTML = '';
+      officers.forEach(o=>{
+        const col = document.createElement('div');
+        col.className = 'col'; // row-cols controls count per row
+        col.innerHTML = `
+          <div class="card shadow-soft h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+              <img src="${o.photo}" alt="${o.name}" class="rounded-circle border"
+                   style="width:64px;height:64px;object-fit:cover"
+                   onerror="this.src='data:image/svg+xml;utf8,${encodeURIComponent('<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'64\\' height=\\'64\\'><rect width=\\'100%\\' height=\\'100%\\' fill=\\'#e9ecef\\'/><text x=\\'50%\\' y=\\'54%\\' font-size=\\'10\\' text-anchor=\\'middle\\' fill=\\'#6c757d\\'>No Photo</text></svg>')}'" />
+              <div>
+                <div class="fw-semibold">${o.name}</div>
+                <div class="text-muted small">${o.role}</div>
+              </div>
+            </div>
+          </div>`;
+        grid.appendChild(col);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', ()=>{
       document.getElementById('year').textContent = new Date().getFullYear();
       renderResolutionTables();
+      renderOfficers();
     });
   </script>
 </body>
