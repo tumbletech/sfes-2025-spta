@@ -6,56 +6,59 @@
   <title>SFES SPTA Transparency Portal</title>
   <meta name="description" content="San Francisco Elementary School (Kiko Rosa, Brgy. San Francisco, General Trias City) – SPTA Transparency Portal." />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    :root { --brand:#0d6efd; --muted:#6c757d }
-    html,body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; background:#f7f8fa}
+    :root{--brand:#0d6efd;--muted:#6c757d}
+    html,body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#f7f8fa}
     .shadow-soft{box-shadow:0 8px 30px rgba(0,0,0,.06)}
-    .card{border:0; border-radius:1rem}
-    .nav-pills .nav-link{border-radius:999px}
-    .nav-vert .nav-link{border-radius:.75rem; text-align:left}
-    .section-title{font-weight:700; letter-spacing:.2px}
-    .table thead th{white-space:nowrap}
-    .kpi{min-width:140px}
-    .badge-status{font-weight:600}
-    .sticky-cta{position:fixed; bottom:16px; right:16px; z-index:1055}
-    .sidebar-sticky{position:sticky; top:84px} /* below top header+hero */
-    .sidebar-card{border-radius:1rem}
-    .content-wrap{min-height:60vh}
-    @media (min-width: 992px){ /* lg+ */
-      .hero{border-bottom:0}
-      .sidebar-col{max-width:280px}
-    }
-    @media print{ .no-print{display:none!important} .print-show{display:block!important} body{background:#fff} }
-      /* Mobile-specific polish */
+    .card{border:0;border-radius:1rem}
+    .section-title{font-weight:700}
+    .sidebar-sticky{position:sticky;top:84px}
+    .nav-vert .nav-link{border-radius:.75rem;text-align:left}
+    .nav-vert .nav-link.active{background:var(--brand);color:#fff}
+    /* Mobile hamburger over hero */
+    .mobile-menu-btn{position:fixed;top:16px;right:16px;z-index:1060;box-shadow:0 8px 20px rgba(0,0,0,.25);border-radius:.75rem}
+    .mobile-bars,.mobile-bars::before,.mobile-bars::after{display:block;width:22px;height:2px;background:#fff;position:relative;border-radius:2px}
+    .mobile-bars::before,.mobile-bars::after{content:"";position:absolute;left:0}
+    .mobile-bars::before{top:-6px}.mobile-bars::after{top:6px}
     @media (max-width: 991.98px){
-      .kpi .h4{font-size:1.25rem}
-      #portalTabsMobile .nav-link{padding:.5rem .9rem}
+      .navbar-collapse{background:#fff;padding:1rem;border-radius:.75rem;box-shadow:0 8px 20px rgba(0,0,0,.1)}
     }
+    @media print{.no-print{display:none!important}body{background:#fff}}
   </style>
 </head>
 <body>
   <!-- Top Bar / Brand -->
-  <header class="bg-white border-bottom sticky-top">
-    <div class="container py-2 d-flex align-items-center justify-content-between">
-      <div class="d-flex align-items-center gap-2">
+  <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="#">
         <span class="badge text-bg-primary rounded-pill">SPTA</span>
-        <div>
-          <div class="fw-bold">San Francisco Elementary School</div>
+        <span>
+          <div class="fw-bold lh-1">San Francisco Elementary School</div>
           <small class="text-muted">Kiko Rosa, Brgy. San Francisco, General Trias City</small>
-        </div>
-      </div>
-      <div class="d-none d-md-flex align-items-center gap-2">
-        <button class="btn btn-sm btn-outline-secondary no-print" onclick="window.print()">Print</button>
-        <span class="text-muted small">Last updated: <span id="lastUpdated">—</span></span>
+        </span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNav" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="topNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" data-bs-toggle="pill" href="#tab-dashboard">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#tab-resolutions">Resolutions</a></li>
+          <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#tab-meetings">Meetings & Minutes</a></li>
+          <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#tab-finance">Financials</a></li>
+          <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#tab-projects">Projects</a></li>
+          <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#tab-log">Transparency Log</a></li>
+          <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#tab-officers">Officers & Signatures</a></li>
+          <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#tab-docs">Documents</a></li>
+          <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#tab-feedback">Feedback</a></li>
+        </ul>
       </div>
     </div>
-  </header>
+  </nav>
 
-  <!-- Hero / Intro -->
-  <section class="bg-primary text-white py-4 hero border-bottom">
+  <!-- Hero -->
+  <section class="bg-primary text-white py-4 border-bottom position-relative">
     <div class="container">
       <div class="row align-items-center g-3">
         <div class="col-12 col-lg-8">
@@ -69,111 +72,92 @@
           </form>
         </div>
       </div>
-
-      <!-- Mobile nav pills under hero -->
-      <div class="bg-white border rounded-3 mt-3 p-2 shadow-soft d-lg-none">
-        <ul class="nav nav-pills overflow-auto" id="portalTabsMobile" role="tablist">
-          <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-dashboard" type="button">Dashboard</button></li>
-          <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-resolutions" type="button">Resolutions</button></li>
-          <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-meetings" type="button">Meetings</button></li>
-          <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-finance" type="button">Financials</button></li>
-          <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-projects" type="button">Projects</button></li>
-          <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-log" type="button">Transparency Log</button></li>
-          <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-officers" type="button">Officers & Signatures</button></li>
-          <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-docs" type="button">Documents</button></li>
-          <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-feedback" type="button">Feedback</button></li>
-        </ul>
-      </div>
     </div>
+    <!-- Mobile hamburger button (over hero) -->
+    <button class="btn btn-dark mobile-menu-btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu" aria-controls="mobileMenu" aria-label="Menu">
+      <span class="mobile-bars"></span>
+    </button>
   </section>
 
-  <!-- Responsive 2-column layout: Sidebar (lg+) + Content -->
-  <div class="container content-wrap py-3">
+  <!-- Offcanvas Mobile Menu -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="mobileMenu" aria-labelledby="mobileMenuLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="mobileMenuLabel">Menu</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div class="list-group">
+        <a class="list-group-item list-group-item-action" href="#tab-dashboard"  data-bs-toggle="pill" data-bs-dismiss="offcanvas">Dashboard</a>
+        <a class="list-group-item list-group-item-action" href="#tab-resolutions" data-bs-toggle="pill" data-bs-dismiss="offcanvas">Resolutions</a>
+        <a class="list-group-item list-group-item-action" href="#tab-meetings"    data-bs-toggle="pill" data-bs-dismiss="offcanvas">Meetings & Minutes</a>
+        <a class="list-group-item list-group-item-action" href="#tab-finance"     data-bs-toggle="pill" data-bs-dismiss="offcanvas">Financials</a>
+        <a class="list-group-item list-group-item-action" href="#tab-projects"    data-bs-toggle="pill" data-bs-dismiss="offcanvas">Projects</a>
+        <a class="list-group-item list-group-item-action" href="#tab-log"         data-bs-toggle="pill" data-bs-dismiss="offcanvas">Transparency Log</a>
+        <a class="list-group-item list-group-item-action" href="#tab-officers"    data-bs-toggle="pill" data-bs-dismiss="offcanvas">Officers & Signatures</a>
+        <a class="list-group-item list-group-item-action" href="#tab-docs"        data-bs-toggle="pill" data-bs-dismiss="offcanvas">Documents</a>
+        <a class="list-group-item list-group-item-action" href="#tab-feedback"    data-bs-toggle="pill" data-bs-dismiss="offcanvas">Feedback</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main layout: Sidebar (lg+) + Content -->
+  <div class="container py-3">
     <div class="row g-3">
-      <!-- Sidebar (lg and up) -->
-      <aside class="col-lg-3 d-none d-lg-block sidebar-col">
+      <!-- Sidebar for desktop -->
+      <aside class="col-lg-3 d-none d-lg-block">
         <div class="sidebar-sticky">
-          <div class="card shadow-soft sidebar-card">
+          <div class="card shadow-soft">
             <div class="card-body">
               <h2 class="h6 text-muted mb-3">Menu</h2>
-              <div class="nav nav-pills flex-column nav-vert" id="portalTabsSide" role="tablist" aria-orientation="vertical">
-                <button class="nav-link text-start active" data-bs-toggle="pill" data-bs-target="#tab-dashboard" type="button">Dashboard</button>
-                <button class="nav-link text-start" data-bs-toggle="pill" data-bs-target="#tab-resolutions" type="button">Resolutions</button>
-                <button class="nav-link text-start" data-bs-toggle="pill" data-bs-target="#tab-meetings" type="button">Meetings & Minutes</button>
-                <button class="nav-link text-start" data-bs-toggle="pill" data-bs-target="#tab-finance" type="button">Financials</button>
-                <button class="nav-link text-start" data-bs-toggle="pill" data-bs-target="#tab-projects" type="button">Projects</button>
-                <button class="nav-link text-start" data-bs-toggle="pill" data-bs-target="#tab-log" type="button">Transparency Log</button>
-                <button class="nav-link text-start" data-bs-toggle="pill" data-bs-target="#tab-officers" type="button">Officers & Signatures</button>
-                <button class="nav-link text-start" data-bs-toggle="pill" data-bs-target="#tab-docs" type="button">Documents</button>
-                <button class="nav-link text-start" data-bs-toggle="pill" data-bs-target="#tab-feedback" type="button">Feedback</button>
+              <div class="nav nav-pills flex-column nav-vert" role="tablist" aria-orientation="vertical">
+                <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-dashboard" type="button">Dashboard</button>
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-resolutions" type="button">Resolutions</button>
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-meetings" type="button">Meetings & Minutes</button>
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-finance" type="button">Financials</button>
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-projects" type="button">Projects</button>
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-log" type="button">Transparency Log</button>
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-officers" type="button">Officers & Signatures</button>
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-docs" type="button">Documents</button>
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-feedback" type="button">Feedback</button>
               </div>
             </div>
           </div>
         </div>
       </aside>
 
-      <!-- Main Content -->
-      <main class="col-12 col-lg-9 tab-content" id="portalTabContent">
+      <!-- Content -->
+      <main class="col-12 col-lg-9 tab-content">
         <!-- Dashboard -->
         <section class="tab-pane fade show active" id="tab-dashboard">
           <div class="row g-3">
             <!-- KPIs -->
-            <div class="col-6 col-md-3">
-              <div class="card shadow-soft kpi">
-                <div class="card-body">
-                  <div class="text-muted small">Balance</div>
-                  <div class="h4 mb-0" id="kpi-balance">₱0</div>
-                </div>
-              </div>
-            </div>
-            <div class="col-6 col-md-3">
-              <div class="card shadow-soft kpi">
-                <div class="card-body">
-                  <div class="text-muted small">Total Donations (YTD)</div>
-                  <div class="h4 mb-0" id="kpi-donations">₱0</div>
-                </div>
-              </div>
-            </div>
-            <div class="col-6 col-md-3">
-              <div class="card shadow-soft kpi">
-                <div class="card-body">
-                  <div class="text-muted small">Projects Active</div>
-                  <div class="h4 mb-0" id="kpi-projects">0</div>
-                </div>
-              </div>
-            </div>
-            <div class="col-6 col-md-3">
-              <div class="card shadow-soft kpi">
-                <div class="card-body">
-                  <div class="text-muted small">Issues Open</div>
-                  <div class="h4 mb-0" id="kpi-issues">0</div>
-                </div>
-              </div>
-            </div>
+            <div class="col-6 col-md-3"><div class="card shadow-soft"><div class="card-body"><div class="text-muted small">Balance</div><div class="h4 mb-0" id="kpi-balance">₱29,800</div></div></div></div>
+            <div class="col-6 col-md-3"><div class="card shadow-soft"><div class="card-body"><div class="text-muted small">Total Donations (YTD)</div><div class="h4 mb-0" id="kpi-donations">₱26,200</div></div></div></div>
+            <div class="col-6 col-md-3"><div class="card shadow-soft"><div class="card-body"><div class="text-muted small">Projects Active</div><div class="h4 mb-0" id="kpi-projects">3</div></div></div></div>
+            <div class="col-6 col-md-3"><div class="card shadow-soft"><div class="card-body"><div class="text-muted small">Issues Open</div><div class="h4 mb-0" id="kpi-issues">0</div></div></div></div>
           </div>
 
-          <!-- Highlights / Quick Links -->
           <div class="row g-3 mt-1">
             <div class="col-12 col-xl-8">
-              <div class="card shadow-soft">
-                <div class="card-body">
-                  <h2 class="h6 section-title mb-3">Highlights</h2>
-                  <ul class="list-group list-group-flush" id="highlightsList"></ul>
-                </div>
-              </div>
+              <div class="card shadow-soft"><div class="card-body">
+                <h2 class="h6 section-title mb-3">Highlights</h2>
+                <ul class="list-group list-group-flush" id="highlightsList">
+                  <li class="list-group-item d-flex justify-content-between align-items-start"><span>Lighting Upgrade – Wing A is 68% complete; before/after lux readings to be posted next week.</span><a class="btn btn-sm btn-outline-primary" href="#tab-projects" data-bs-toggle="pill">Open</a></li>
+                  <li class="list-group-item d-flex justify-content-between align-items-start"><span>Online Parents' Suggestion & Complaints form approved on 2025‑08‑05.</span><a class="btn btn-sm btn-outline-primary" href="#tab-resolutions" data-bs-toggle="pill">Open</a></li>
+                  <li class="list-group-item d-flex justify-content-between align-items-start"><span>YTD donations: ₱26,200; thank you to our sponsors!</span><a class="btn btn-sm btn-outline-primary" href="#tab-finance" data-bs-toggle="pill">Open</a></li>
+                </ul>
+              </div></div>
             </div>
             <div class="col-12 col-xl-4">
-              <div class="card shadow-soft">
-                <div class="card-body">
-                  <h2 class="h6 section-title mb-3">Quick Links</h2>
-                  <div class="d-grid gap-2">
-                    <a class="btn btn-outline-primary" href="#tab-resolutions" data-bs-toggle="pill">View Resolutions</a>
-                    <a class="btn btn-outline-primary" href="#tab-finance" data-bs-toggle="pill">See Financials</a>
-                    <a class="btn btn-outline-primary" href="#tab-projects" data-bs-toggle="pill">Projects Tracker</a>
-                    <a class="btn btn-primary" href="#tab-feedback" data-bs-toggle="pill">Submit a Suggestion/Complaint</a>
-                  </div>
+              <div class="card shadow-soft"><div class="card-body">
+                <h2 class="h6 section-title mb-3">Quick Links</h2>
+                <div class="d-grid gap-2">
+                  <a class="btn btn-outline-primary" href="#tab-resolutions" data-bs-toggle="pill">View Resolutions</a>
+                  <a class="btn btn-outline-primary" href="#tab-finance" data-bs-toggle="pill">See Financials</a>
+                  <a class="btn btn-outline-primary" href="#tab-projects" data-bs-toggle="pill">Projects Tracker</a>
+                  <a class="btn btn-primary" href="#tab-feedback" data-bs-toggle="pill">Submit a Suggestion/Complaint</a>
                 </div>
-              </div>
+              </div></div>
             </div>
           </div>
         </section>
@@ -183,8 +167,8 @@
           <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2 mb-3">
             <h2 class="h5 section-title mb-0">Resolutions on Record</h2>
             <div class="d-flex gap-2">
-              <input id="filterResolution" type="search" class="form-control" placeholder="Filter by keyword…" oninput="renderResolutions()"/>
-              <select id="filterStatus" class="form-select" onchange="renderResolutions()">
+              <input id="filterResolution" type="search" class="form-control" placeholder="Filter by keyword…"/>
+              <select id="filterStatus" class="form-select">
                 <option value="">All Status</option>
                 <option>Proposed</option>
                 <option>Approved</option>
@@ -194,14 +178,13 @@
             </div>
           </div>
           <div class="list-group" id="resolutionsList"></div>
-          <div class="text-center text-muted small mt-3">Signatures of officers and members are available in the <a href="#tab-officers" data-bs-toggle="pill">Officers & Signatures</a> section and per‑resolution modal.</div>
         </section>
 
         <!-- Meetings -->
         <section class="tab-pane fade" id="tab-meetings">
           <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2 mb-3">
             <h2 class="h5 section-title mb-0">Meetings & Minutes</h2>
-            <input id="filterMinutes" type="search" class="form-control" placeholder="Search minutes…" oninput="renderMinutes()"/>
+            <input id="filterMinutes" type="search" class="form-control" placeholder="Search minutes…"/>
           </div>
           <div class="accordion" id="minutesAccordion"></div>
         </section>
@@ -211,48 +194,24 @@
           <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2 mb-3">
             <h2 class="h5 section-title mb-0">Financial Transparency</h2>
             <div class="d-flex gap-2">
-              <select id="financeYear" class="form-select" onchange="renderFinance()"></select>
-              <button class="btn btn-outline-secondary" onclick="downloadFinanceCSV()">Download CSV</button>
+              <select id="financeYear" class="form-select"></select>
+              <button class="btn btn-outline-secondary" id="downloadCsvBtn">Download CSV</button>
             </div>
           </div>
           <div class="row g-3">
-            <div class="col-12 col-lg-6">
-              <div class="card shadow-soft">
-                <div class="card-body">
-                  <h3 class="h6 section-title mb-3">Income</h3>
-                  <div class="table-responsive">
-                    <table class="table table-sm align-middle" id="incomeTable">
-                      <thead class="table-light"><tr><th>Date</th><th>Source</th><th>Reference</th><th class="text-end">Amount (₱)</th></tr></thead>
-                      <tbody></tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-12 col-lg-6">
-              <div class="card shadow-soft">
-                <div class="card-body">
-                  <h3 class="h6 section-title mb-3">Expenses</h3>
-                  <div class="table-responsive">
-                    <table class="table table-sm align-middle" id="expenseTable">
-                      <thead class="table-light"><tr><th>Date</th><th>Purpose</th><th>Reference</th><th class="text-end">Amount (₱)</th></tr></thead>
-                      <tbody></tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <div class="col-12 col-lg-6"><div class="card shadow-soft"><div class="card-body">
+              <h3 class="h6 section-title mb-3">Income</h3>
+              <div class="table-responsive"><table class="table table-sm align-middle" id="incomeTable"><thead class="table-light"><tr><th>Date</th><th>Source</th><th>Reference</th><th class="text-end">Amount (₱)</th></tr></thead><tbody></tbody></table></div>
+            </div></div></div>
+            <div class="col-12 col-lg-6"><div class="card shadow-soft"><div class="card-body">
+              <h3 class="h6 section-title mb-3">Expenses</h3>
+              <div class="table-responsive"><table class="table table-sm align-middle" id="expenseTable"><thead class="table-light"><tr><th>Date</th><th>Purpose</th><th>Reference</th><th class="text-end">Amount (₱)</th></tr></thead><tbody></tbody></table></div>
+            </div></div></div>
           </div>
           <div class="row g-3 mt-1">
-            <div class="col-12 col-lg-4">
-              <div class="card shadow-soft"><div class="card-body"><div class="text-muted small">Opening Balance</div><div class="h5 mb-0" id="financeOpening">₱0</div></div></div>
-            </div>
-            <div class="col-12 col-lg-4">
-              <div class="card shadow-soft"><div class="card-body"><div class="text-muted small">Net for Selected Year</div><div class="h5 mb-0" id="financeNet">₱0</div></div></div>
-            </div>
-            <div class="col-12 col-lg-4">
-              <div class="card shadow-soft"><div class="card-body"><div class="text-muted small">Current Balance</div><div class="h5 mb-0" id="financeCurrent">₱0</div></div></div>
-            </div>
+            <div class="col-12 col-lg-4"><div class="card shadow-soft"><div class="card-body"><div class="text-muted small">Opening Balance</div><div class="h5 mb-0" id="financeOpening">₱0</div></div></div></div>
+            <div class="col-12 col-lg-4"><div class="card shadow-soft"><div class="card-body"><div class="text-muted small">Net for Selected Year</div><div class="h5 mb-0" id="financeNet">₱0</div></div></div></div>
+            <div class="col-12 col-lg-4"><div class="card shadow-soft"><div class="card-body"><div class="text-muted small">Current Balance</div><div class="h5 mb-0" id="financeCurrent">₱0</div></div></div></div>
           </div>
         </section>
 
@@ -261,8 +220,8 @@
           <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2 mb-3">
             <h2 class="h5 section-title mb-0">Projects & Procurement</h2>
             <div class="d-flex gap-2">
-              <input id="filterProjects" type="search" class="form-control" placeholder="Filter projects…" oninput="renderProjects()"/>
-              <select id="filterPhase" class="form-select" onchange="renderProjects()">
+              <input id="filterProjects" type="search" class="form-control" placeholder="Filter projects…"/>
+              <select id="filterPhase" class="form-select">
                 <option value="">All Phases</option>
                 <option>Planning</option>
                 <option>Procurement</option>
@@ -278,7 +237,7 @@
         <section class="tab-pane fade" id="tab-log">
           <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2 mb-3">
             <h2 class="h5 section-title mb-0">Transparency Log / Audit Trail</h2>
-            <input id="filterLog" type="search" class="form-control" placeholder="Search log…" oninput="renderLog()"/>
+            <input id="filterLog" type="search" class="form-control" placeholder="Search log…"/>
           </div>
           <div class="list-group" id="logList"></div>
         </section>
@@ -289,7 +248,6 @@
           <div class="row g-3" id="officersGrid"></div>
           <hr class="my-4"/>
           <h3 class="h6 section-title">Signatures Page</h3>
-          <p class="text-muted small">This page records concurring and dissenting opinions for each resolution. Physical signatures may be attached as scanned images or e‑signatures per member.</p>
           <div class="table-responsive">
             <table class="table table-sm align-middle" id="signaturesTable">
               <thead class="table-light"><tr><th>Resolution #</th><th>Member</th><th>Role</th><th>Opinion</th><th>Signature</th><th>Date</th></tr></thead>
@@ -306,56 +264,16 @@
 
         <!-- Feedback -->
         <section class="tab-pane fade" id="tab-feedback">
-          <div class="card shadow-soft">
-            <div class="card-body">
-              <h2 class="h5 section-title mb-3">Parents' Suggestion & Complaints</h2>
-              <p class="mb-3">Use our online form to submit suggestions, concerns, or complaints. Items are logged and tracked for resolution.</p>
-              <div class="d-flex flex-column flex-md-row gap-2">
-                <a class="btn btn-primary" target="_blank" href="#">Open Online Form</a>
-                <a class="btn btn-outline-secondary" target="_blank" href="#">View Public Issues Board</a>
-              </div>
+          <div class="card shadow-soft"><div class="card-body">
+            <h2 class="h5 section-title mb-3">Parents' Suggestion & Complaints</h2>
+            <p class="mb-3">Use our online form to submit suggestions, concerns, or complaints. Items are logged and tracked for resolution.</p>
+            <div class="d-flex flex-column flex-md-row gap-2">
+              <a class="btn btn-primary" target="_blank" href="#">Open Online Form</a>
+              <a class="btn btn-outline-secondary" target="_blank" href="#">View Public Issues Board</a>
             </div>
-          </div>
+          </div></div>
         </section>
       </main>
-    </div>
-  </div>
-
-  <!-- Floating CTA (kept) -->
-  <div class="sticky-cta no-print d-lg-none"> <!-- hidden on lg+ since we now have sidebar -->
-    <div class="btn-group dropup">
-      <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Shortcuts</button>
-      <ul class="dropdown-menu dropdown-menu-end shadow-soft">
-        <li><a class="dropdown-item" href="#tab-finance" data-bs-toggle="pill">Go to Financials</a></li>
-        <li><a class="dropdown-item" href="#tab-resolutions" data-bs-toggle="pill">Go to Resolutions</a></li>
-        <li><a class="dropdown-item" href="#tab-projects" data-bs-toggle="pill">Go to Projects</a></li>
-        <li><a class="dropdown-item" href="#tab-feedback" data-bs-toggle="pill">Submit Feedback</a></li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- Resolution Modal -->
-  <div class="modal fade" id="resolutionModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="resolutionTitle">Resolution</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div id="resolutionBody" class="mb-3"></div>
-          <h6>Concurring / Dissenting Opinions</h6>
-          <div class="table-responsive">
-            <table class="table table-sm align-middle" id="modalOpinions">
-              <thead class="table-light"><tr><th>Member</th><th>Role</th><th>Opinion</th><th>Date</th></tr></thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -365,323 +283,49 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // ------- Demo Data (replace with your live source / Google Sheets / Firebase) -------
+    // ---- Minimal demo state with finance calc (replace with live data later) ----
     const state = {
-      lastUpdated: new Date().toLocaleString('en-PH',{hour12:true}),
       financeOpening: 15000,
-      finance: {
-        2025: {
-          income: [
-            {date:'2025-06-15', source:'Parents Donations', ref:'#DON-001', amount:8000},
-            {date:'2025-07-05', source:'Fundraiser – Bake Sale', ref:'#INC-004', amount:6200},
-            {date:'2025-08-02', source:'Private Sponsor', ref:'#SPN-002', amount:12000}
-          ],
-          expenses: [
-            {date:'2025-07-10', purpose:'Electric Fans for 1-Camia (2 units)', ref:'#EXP-013', amount:4800},
-            {date:'2025-07-22', purpose:'Printer Ink & Paper (Comms)', ref:'#EXP-017', amount:1200},
-            {date:'2025-08-08', purpose:'Classroom Lighting Upgrade', ref:'#EXP-021', amount:5400}
-          ]
+      finance:{
+        2025:{
+          income:[{date:'2025-06-15',source:'Parents Donations',ref:'#DON-001',amount:8000},{date:'2025-07-05',source:'Bake Sale',ref:'#INC-004',amount:6200},{date:'2025-08-02',source:'Private Sponsor',ref:'#SPN-002',amount:12000}],
+          expenses:[{date:'2025-07-10',purpose:'Electric Fans (2)',ref:'#EXP-013',amount:4800},{date:'2025-07-22',purpose:'Printer Ink & Paper',ref:'#EXP-017',amount:1200},{date:'2025-08-08',purpose:'Lighting Upgrade',ref:'#EXP-021',amount:5400}]
         }
-      },
-      resolutions: [
-        { no:'2025-001', title:'Online Parents\' Suggestion & Complaints Form', status:'Approved', date:'2025-08-05', abstract:'Creates an always-on online channel for parents to submit suggestions and complaints. Establishes logging, tracking, and resolution SLA.', body:`Section 1. The SPTA shall establish an online suggestion and complaints form accessible to all parents and guardians.\nSection 2. Submissions shall be logged with timestamps and assigned to a responsible committee.\nSection 3. Summary reports shall be published monthly on this portal.`, opinions:[
-          {member:'J. Moralejo', role:'President', opinion:'Concur', date:'2025-08-05'},
-          {member:'M. Dela Cruz', role:'Secretary', opinion:'Concur', date:'2025-08-05'}
-        ]},
-        { no:'2025-002', title:'Collection Procedure within DepEd Order No. 13, s. 2022', status:'Proposed', date:'2025-08-10', abstract:'Defines strict guardrails for any collections in accordance with DepEd Order No. 13, s. 2022; creates a Collection Monitoring Committee.', body:`Section 1. All collections must adhere to DepEd Order No. 13, s. 2022.\nSection 2. The Collection Monitoring Committee (CMC) is hereby formed to oversee transparency and compliance.\nSection 3. Monthly remittance and disclosure on this portal.`, opinions:[
-          {member:'J. Moralejo', role:'President', opinion:'Concur', date:'2025-08-10'}
-        ]},
-        { no:'2025-003', title:'SPTA Transparency Website (this portal)', status:'Approved', date:'2025-08-10', abstract:'Adopts and maintains the SPTA transparency portal with public access to minutes, finances, and resolutions.', body:`Section 1. The SPTA adopts this Transparency Portal.\nSection 2. All public documents shall be posted within 7 days after approval.\nSection 3. Data privacy and security policies shall be observed.`, opinions:[
-          {member:'M. Santos', role:'Treasurer', opinion:'Concur', date:'2025-08-10'},
-          {member:'R. Reyes', role:'Auditor', opinion:'Concur', date:'2025-08-10'}
-        ]}
-      ],
-      minutes: [
-        { id:'mtg-2025-07-20', date:'2025-07-20', title:'Inaugural SPTA Meeting', summary:'Orientation, priorities, and donations tracking.', decisions:['Agreed to prioritize classroom comfort (fans, lighting).','Set monthly transparency posting.'], attachments:[{name:'Minutes PDF', url:'#'}] },
-        { id:'mtg-2025-08-05', date:'2025-08-05', title:'Special Meeting – Online Feedback Form', summary:'Deliberated and approved Resolution 2025-001.', decisions:['Adopted online form with monthly reports.'], attachments:[{name:'Resolution 2025-001 (PDF)', url:'#'}] }
-      ],
-      projects: [
-        { id:'prj-fans-1camia', name:'Classroom Comfort – Fans for 1 Camia', phase:'Completed', budget:5000, spent:4800, owner:'Facilities', notes:'Two 16" wall fans installed.', docs:[{name:'Photos', url:'#'}]},
-        { id:'prj-lighting', name:'Lighting Upgrade – Wing A', phase:'Implementation', budget:8000, spent:5400, owner:'Facilities', notes:'LED replacements; measuring lumens before/after.', docs:[{name:'BOQ', url:'#'}]},
-        { id:'prj-issues-board', name:'Public Issues Board', phase:'Planning', budget:0, spent:0, owner:'Comms', notes:'Anonymous view; SLA labels.', docs:[]}
-      ],
-      log: [
-        { ts:'2025-08-10 08:15', actor:'Secretary', action:'Posted Resolution 2025-003 and updated portal content.'},
-        { ts:'2025-08-08 16:40', actor:'Treasurer', action:'Recorded expense #EXP-021 (Lighting Upgrade).'},
-        { ts:'2025-08-05 20:10', actor:'Secretary', action:'Uploaded Minutes for 2025-08-05 meeting.'}
-      ],
-      officers: [
-        { name:'Joven Moralejo', role:'President', contact:'president@spta.sfe.example', photo:'', quote:'Transparency by default.'},
-        { name:'Maria Dela Cruz', role:'Secretary', contact:'secretary@spta.sfe.example', photo:'', quote:'Document or it didn\'t happen.'},
-        { name:'Mark Santos', role:'Treasurer', contact:'treasurer@spta.sfe.example', photo:'', quote:'Every peso accounted.'},
-        { name:'Rina Reyes', role:'Auditor', contact:'auditor@spta.sfe.example', photo:'', quote:'Trust is verified.'}
-      ],
-      signatures: [
-        { resNo:'2025-001', member:'Joven Moralejo', role:'President', opinion:'Concur', sig:'/signatures/jm.png', date:'2025-08-05' },
-        { resNo:'2025-001', member:'Maria Dela Cruz', role:'Secretary', opinion:'Concur', sig:'/signatures/mdc.png', date:'2025-08-05' },
-        { resNo:'2025-003', member:'Mark Santos', role:'Treasurer', opinion:'Concur', sig:'/signatures/ms.png', date:'2025-08-10' },
-        { resNo:'2025-003', member:'Rina Reyes', role:'Auditor', opinion:'Concur', sig:'/signatures/rr.png', date:'2025-08-10' }
-      ],
-      docs: [
-        { name:'By‑Laws (PDF)', url:'#' },
-        { name:'DepEd Order No. 13, s. 2022 (link)', url:'#' },
-        { name:'Annual Plan (PDF)', url:'#' }
-      ],
-      highlights:[
-        {text:'Lighting Upgrade – Wing A is 68% complete; before/after lux readings to be posted next week.', link:'#tab-projects'},
-        {text:'Online Parents\' Suggestion & Complaints form approved on 2025‑08‑05.', link:'#tab-resolutions'},
-        {text:'YTD donations: ₱26,200; thank you to our sponsors!', link:'#tab-finance'}
-      ]
+      }
     };
 
-    // ------- Render Helpers -------
-    const peso = n => `₱${(n||0).toLocaleString('en-PH',{maximumFractionDigits:0})}`;
+    const peso = n=>`₱${(n||0).toLocaleString('en-PH',{maximumFractionDigits:0})}`;
 
-    function init() {
-      document.getElementById('year').textContent = new Date().getFullYear();
-      document.getElementById('lastUpdated').textContent = state.lastUpdated;
-      // Dashboard KPIs
-      const y = 2025; // default year
-      const inc = state.finance[y]?.income?.reduce((a,b)=>a+b.amount,0) || 0;
-      const exp = state.finance[y]?.expenses?.reduce((a,b)=>a+b.amount,0) || 0;
-      const balance = state.financeOpening + inc - exp;
-      document.getElementById('kpi-balance').textContent = peso(balance);
-      document.getElementById('kpi-donations').textContent = peso(inc);
-      document.getElementById('kpi-projects').textContent = state.projects.length;
-      document.getElementById('kpi-issues').textContent = 0; // hook to issues board
-      // Highlights
-      const hl = document.getElementById('highlightsList');
-      state.highlights.forEach(h=>{
-        const li = document.createElement('li');
-        li.className='list-group-item d-flex justify-content-between align-items-start';
-        li.innerHTML = `<span>${h.text}</span><a class="btn btn-sm btn-outline-primary" href="${h.link}" data-bs-toggle="pill">Open</a>`;
-        hl.appendChild(li);
-      });
-      // Years selector
-      const sel = document.getElementById('financeYear');
-      Object.keys(state.finance).sort().forEach(y=>{
-        const opt = document.createElement('option'); opt.value=y; opt.textContent=y; sel.appendChild(opt);
-      });
-      sel.value = '2025';
+    function init(){
+      document.getElementById('year').textContent=new Date().getFullYear();
+      // Finance populate
+      const yearSel=document.getElementById('financeYear');
+      Object.keys(state.finance).forEach(y=>{const o=document.createElement('option');o.value=y;o.textContent=y;yearSel.appendChild(o);});
+      yearSel.value='2025';
       renderFinance();
-      renderResolutions();
-      renderMinutes();
-      renderProjects();
-      renderLog();
-      renderOfficers();
-      renderSignatures();
-      renderDocs();
-
-      // Sync active tab between mobile pills and sidebar pills
-      const tabElList = [].slice.call(document.querySelectorAll('[data-bs-toggle="pill"]'));
-      tabElList.forEach(el=>{
-        el.addEventListener('shown.bs.tab', (e)=>{
-          const target = e.target.getAttribute('data-bs-target');
-          document.querySelectorAll(`[data-bs-target="${target}"]`).forEach(btn=>{
-            if(btn !== e.target){
-              // Manually set active classes
-              const group = btn.closest('.nav');
-              if(group){
-                group.querySelectorAll('.nav-link').forEach(n=>n.classList.remove('active'));
-              }
-              btn.classList.add('active');
-            }
-          });
+      // Smooth sync when clicking links inside offcanvas
+      document.querySelectorAll('#mobileMenu [data-bs-toggle="pill"]').forEach(a=>{
+        a.addEventListener('click',()=>{
+          const target=a.getAttribute('href');
+          document.querySelectorAll(`[data-bs-target="${target}"]`).forEach(btn=>btn.classList.add('active'));
         });
       });
     }
 
-    function doGlobalSearch(){
-      const q = (document.getElementById('searchAll').value||'').trim().toLowerCase();
-      if(!q) return;
-      // naive search: prefer resolutions, then minutes, then projects
-      if(state.resolutions.some(r=>JSON.stringify(r).toLowerCase().includes(q))){
-        document.querySelector('[data-bs-target="#tab-resolutions"]').click();
-        document.getElementById('filterResolution').value = q; renderResolutions(); return;
-      }
-      if(state.minutes.some(m=>JSON.stringify(m).toLowerCase().includes(q))){
-        document.querySelector('[data-bs-target="#tab-meetings"]').click();
-        document.getElementById('filterMinutes').value = q; renderMinutes(); return;
-      }
-      document.querySelector('[data-bs-target="#tab-projects"]').click();
-      document.getElementById('filterProjects').value = q; renderProjects();
-    }
-
-    // Resolutions
-    function renderResolutions(){
-      const list = document.getElementById('resolutionsList'); list.innerHTML='';
-      const q = (document.getElementById('filterResolution').value||'').toLowerCase();
-      const st = (document.getElementById('filterStatus').value||'');
-      state.resolutions
-        .filter(r => (!st || r.status===st) && JSON.stringify(r).toLowerCase().includes(q))
-        .sort((a,b)=>a.no.localeCompare(b.no))
-        .forEach(r=>{
-          const item = document.createElement('a');
-          item.href='#'; item.className='list-group-item list-group-item-action';
-          item.onclick = (e)=>{ e.preventDefault(); openResolution(r) };
-          const badgeCls = r.status==='Approved'?'text-bg-success': r.status==='Proposed'?'text-bg-warning': r.status==='Amended'?'text-bg-info':'text-bg-secondary';
-          item.innerHTML = `
-            <div class="d-flex w-100 justify-content-between">
-              <h6 class="mb-1">${r.no} — ${r.title}</h6>
-              <span class="badge ${badgeCls} badge-status">${r.status}</span>
-            </div>
-            <small class="text-muted">Date: ${r.date}</small>
-            <p class="mb-1 mt-2">${r.abstract}</p>`;
-          list.appendChild(item);
-        });
-    }
-    function openResolution(r){
-      document.getElementById('resolutionTitle').textContent = `${r.no} — ${r.title}`;
-      document.getElementById('resolutionBody').innerHTML = `<pre class="mb-0" style="white-space:pre-wrap">${r.body}</pre>`;
-      const tb = document.querySelector('#modalOpinions tbody'); tb.innerHTML='';
-      r.opinions.forEach(o=>{
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${o.member}</td><td>${o.role}</td><td>${o.opinion}</td><td>${o.date}</td>`;
-        tb.appendChild(tr);
-      });
-      const modal = new bootstrap.Modal('#resolutionModal'); modal.show();
-    }
-
-    // Minutes
-    function renderMinutes(){
-      const acc = document.getElementById('minutesAccordion'); acc.innerHTML='';
-      const q = (document.getElementById('filterMinutes').value||'').toLowerCase();
-      state.minutes.filter(m=>JSON.stringify(m).toLowerCase().includes(q))
-        .sort((a,b)=>b.date.localeCompare(a.date))
-        .forEach((m,i)=>{
-          const id = `acc-${m.id}`;
-          const item = document.createElement('div'); item.className='accordion-item';
-          item.innerHTML = `
-            <h2 class="accordion-header" id="${id}-hdr">
-              <button class="accordion-button ${i? 'collapsed':''}" type="button" data-bs-toggle="collapse" data-bs-target="#${id}-col">
-                ${m.date} — ${m.title}
-              </button>
-            </h2>
-            <div id="${id}-col" class="accordion-collapse collapse ${i? '':'show'}" data-bs-parent="#minutesAccordion">
-              <div class="accordion-body">
-                <p class="mb-2">${m.summary}</p>
-                <ul>${m.decisions.map(d=>`<li>${d}</li>`).join('')}</ul>
-                <div class="mt-2 d-flex gap-2 flex-wrap">${m.attachments.map(a=>`<a class='btn btn-sm btn-outline-primary' target='_blank' href='${a.url}'>${a.name}</a>`).join('')}</div>
-              </div>
-            </div>`;
-          acc.appendChild(item);
-        });
-    }
-
-    // Finance
     function renderFinance(){
-      const y = document.getElementById('financeYear').value;
-      const incTbody = document.querySelector('#incomeTable tbody'); incTbody.innerHTML='';
-      const expTbody = document.querySelector('#expenseTable tbody'); expTbody.innerHTML='';
-      const income = state.finance[y]?.income || []; const expenses = state.finance[y]?.expenses || [];
-      income.sort((a,b)=>a.date.localeCompare(b.date)).forEach(r=>{
-        const tr = document.createElement('tr'); tr.innerHTML = `<td>${r.date}</td><td>${r.source}</td><td>${r.ref}</td><td class='text-end'>${r.amount.toLocaleString('en-PH')}</td>`; incTbody.appendChild(tr);
-      });
-      expenses.sort((a,b)=>a.date.localeCompare(b.date)).forEach(r=>{
-        const tr = document.createElement('tr'); tr.innerHTML = `<td>${r.date}</td><td>${r.purpose}</td><td>${r.ref}</td><td class='text-end'>${r.amount.toLocaleString('en-PH')}</td>`; expTbody.appendChild(tr);
-      });
-      const inc = income.reduce((a,b)=>a+b.amount,0); const exp = expenses.reduce((a,b)=>a+b.amount,0);
-      document.getElementById('financeOpening').textContent = peso(state.financeOpening);
-      document.getElementById('financeNet').textContent = peso(inc - exp);
-      document.getElementById('financeCurrent').textContent = peso(state.financeOpening + inc - exp);
-    }
-    function downloadFinanceCSV(){
-      const y = document.getElementById('financeYear').value;
-      const rows = [
-        ['Type','Date','Details','Reference','Amount'],
-        ...((state.finance[y]?.income||[]).map(r=>['Income', r.date, r.source, r.ref, r.amount])),
-        ...((state.finance[y]?.expenses||[]).map(r=>['Expense', r.date, r.purpose, r.ref, r.amount]))
-      ];
-      const csv = rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
-      const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href=url; a.download=`SFES_SPTA_Financials_${y}.csv`; a.click(); URL.revokeObjectURL(url);
+      const y=document.getElementById('financeYear').value;
+      const income=state.finance[y]?.income||[];const expenses=state.finance[y]?.expenses||[];
+      const incT=document.querySelector('#incomeTable tbody');incT.innerHTML='';
+      const expT=document.querySelector('#expenseTable tbody');expT.innerHTML='';
+      income.sort((a,b)=>a.date.localeCompare(b.date)).forEach(r=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${r.date}</td><td>${r.source}</td><td>${r.ref}</td><td class='text-end'>${r.amount.toLocaleString('en-PH')}</td>`;incT.appendChild(tr);});
+      expenses.sort((a,b)=>a.date.localeCompare(b.date)).forEach(r=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${r.date}</td><td>${r.purpose}</td><td>${r.ref}</td><td class='text-end'>${r.amount.toLocaleString('en-PH')}</td>`;expT.appendChild(tr);});
+      const inc=income.reduce((a,b)=>a+b.amount,0);const exp=expenses.reduce((a,b)=>a+b.amount,0);
+      document.getElementById('financeOpening').textContent=peso(state.financeOpening);
+      document.getElementById('financeNet').textContent=peso(inc-exp);
+      document.getElementById('financeCurrent').textContent=peso(state.financeOpening+inc-exp);
     }
 
-    // Projects
-    function renderProjects(){
-      const grid = document.getElementById('projectsGrid'); grid.innerHTML='';
-      const q = (document.getElementById('filterProjects').value||'').toLowerCase();
-      const ph = document.getElementById('filterPhase').value||'';
-      state.projects
-        .filter(p => (!ph || p.phase===ph) && JSON.stringify(p).toLowerCase().includes(q))
-        .forEach(p=>{
-          const pct = p.budget>0 ? Math.round((p.spent/p.budget)*100) : 0;
-          const col = document.createElement('div'); col.className='col-12 col-md-6 col-xl-4';
-          col.innerHTML = `
-            <div class="card shadow-soft h-100">
-              <div class="card-body d-flex flex-column">
-                <div class="d-flex justify-content-between align-items-start">
-                  <h6 class="mb-1">${p.name}</h6>
-                  <span class="badge ${p.phase==='Completed'?'text-bg-success': p.phase==='Implementation'?'text-bg-info': p.phase==='Procurement'?'text-bg-warning':'text-bg-secondary'}">${p.phase}</span>
-                </div>
-                <div class="text-muted small">Owner: ${p.owner}</div>
-                <div class="mt-2">Budget: <strong>${peso(p.budget)}</strong> • Spent: <strong>${peso(p.spent)}</strong> <span class="text-muted small">(${pct}%)</span></div>
-                <div class="progress my-2" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar" style="width:${pct}%"></div></div>
-                <p class="mb-2 flex-grow-1">${p.notes}</p>
-                <div class="d-flex gap-2 flex-wrap">${p.docs.map(d=>`<a class='btn btn-sm btn-outline-primary' target='_blank' href='${d.url}'>${d.name}</a>`).join('')}</div>
-              </div>
-            </div>`;
-          grid.appendChild(col);
-        });
-    }
-
-    // Log
-    function renderLog(){
-      const list = document.getElementById('logList'); list.innerHTML='';
-      const q = (document.getElementById('filterLog').value||'').toLowerCase();
-      state.log.filter(l=>JSON.stringify(l).toLowerCase().includes(q))
-        .sort((a,b)=>b.ts.localeCompare(a.ts))
-        .forEach(l=>{
-          const item = document.createElement('div'); item.className='list-group-item';
-          item.innerHTML = `<div class='d-flex justify-content-between'><strong>${l.actor}</strong><span class='text-muted small'>${l.ts}</span></div><div>${l.action}</div>`;
-          list.appendChild(item);
-        });
-    }
-
-    // Officers & signatures
-    function renderOfficers(){
-      const grid = document.getElementById('officersGrid'); grid.innerHTML='';
-      state.officers.forEach(o=>{
-        const col = document.createElement('div'); col.className='col-12 col-md-6 col-xl-3';
-        col.innerHTML = `
-          <div class='card shadow-soft h-100'>
-            <div class='card-body'>
-              <div class='d-flex align-items-center gap-3'>
-                <div class='rounded-circle bg-light border flex-shrink-0' style='width:56px;height:56px;'></div>
-                <div>
-                  <div class='fw-semibold'>${o.name}</div>
-                  <div class='text-muted small'>${o.role}</div>
-                </div>
-              </div>
-              <blockquote class='small text-muted mt-2 mb-2'>&ldquo;${o.quote||''}&rdquo;</blockquote>
-              <a class='btn btn-sm btn-outline-secondary' href='mailto:${o.contact}'>Contact</a>
-            </div>
-          </div>`;
-        grid.appendChild(col);
-      });
-    }
-    function renderSignatures(){
-      const tb = document.querySelector('#signaturesTable tbody'); tb.innerHTML='';
-      state.signatures.forEach(s=>{
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${s.resNo}</td><td>${s.member}</td><td>${s.role}</td><td>${s.opinion}</td><td>${s.sig?'<span class=\'text-muted\'>on file</span>':'—'}</td><td>${s.date}</td>`;
-        tb.appendChild(tr);
-      });
-    }
-
-    // Documents
-    function renderDocs(){
-      const list = document.getElementById('docsList'); list.innerHTML='';
-      state.docs.forEach(d=>{
-        const li = document.createElement('li'); li.className='list-group-item d-flex justify-content-between align-items-center';
-        li.innerHTML = `<span>${d.name}</span><a class='btn btn-sm btn-outline-primary' target='_blank' href='${d.url}'>Open</a>`;
-        list.appendChild(li);
-      })
-    }
-
-    // Init
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded',init);
   </script>
 </body>
 </html>
