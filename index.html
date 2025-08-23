@@ -16,12 +16,8 @@
     .sidebar-sticky{position:sticky;top:84px}
     .nav-vert .nav-link{border-radius:.75rem;text-align:left}
     .nav-vert .nav-link.active{background:var(--brand);color:#fff}
-
     /* Center KPIs on mobile */
-    @media (max-width: 767.98px){
-      .kpi .card-body{text-align:center}
-    }
-
+    @media (max-width: 767.98px){ .kpi .card-body{text-align:center} }
     @media print{.no-print{display:none!important}body{background:#fff}}
   </style>
 </head>
@@ -45,7 +41,7 @@
       <div class="row align-items-center g-3">
         <div class="col-12 col-lg-8">
           <h1 class="h3 mb-2">SPTA Transparency Portal</h1>
-          <p class="mb-0 opacity-75">Real-time view of resolutions, meetings, finances, projects, and documents. Built mobile‑first for parents and guardians.</p>
+          <p class="mb-0 opacity-75">Real-time view of resolutions, meetings, finances, projects, and documents. Built mobile-first for parents and guardians.</p>
         </div>
         <div class="col-12 col-lg-4">
           <form class="d-flex gap-2" onsubmit="event.preventDefault(); doGlobalSearch()">
@@ -126,8 +122,7 @@
             <div class="col-12 col-xl-8">
               <div class="card shadow-soft"><div class="card-body">
                 <h2 class="h6 section-title mb-3">Announcements</h2>
-                <ul class="list-group list-group-flush" id="announcementList">
-                </ul>
+                <ul class="list-group list-group-flush" id="announcementList"></ul>
               </div></div>
             </div>
             <div class="col-12 col-xl-4">
@@ -143,6 +138,7 @@
             </div>
           </div>
         </section>
+
         <!-- Resolutions -->
         <section class="tab-pane fade" id="tab-resolutions">
           <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2 mb-3">
@@ -258,58 +254,82 @@
   </div>
 
   <footer class="py-4 text-center text-muted small">
-    <div>© <span id="year"></span> SFES SPTA • Transparency by Design • Mobile‑first</div>
+    <div>© <span id="year"></span> SFES SPTA • Transparency by Design • Mobile-first</div>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-  // Simple search guard
-  function doGlobalSearch(){ /* TODO: wire up actual search */ }
+    // Simple search guard
+    function doGlobalSearch(){ /* TODO: wire up actual search */ }
 
-  // Demo dataset for resolutions (replace with your real source)
-  const resolutionsData = [
-    {no:'2025-001', title:'Recognition and Facilitation of Records Turnover from the Previous SPTA', lead:'VP Grace Echavia', basis:'DepEd Order No. 13, s. 2022 – Sec. 7(a)', status:'Approved'},
-    {no:'2025-002', title:'Creation of a New SPTA By‑Laws and Review of Previous Versions', lead:'VP Grace Echavia', basis:'DepEd Order No. 13, s. 2022 – Sec. 8(a–c)', status:'Under Review'},
-    {no:'2025-003', title:'Adoption of a Volunteers, Services, and Contributions (VSC) Policy', lead:'Treas. Leizelyn Agoy‑Agoy', basis:'DepEd Order No. 13, s. 2022 – Sec. 10(a–b)', status:'Proposed'},
-    {no:'2025-004', title:'Anonymous Feedback/Complaint Form for Parents', lead:'BoD Pedro L. Siervo, Jr.', basis:'DepEd Order No. 13, s. 2022 – Sec. 7(c)', status:'Approved'},
-    {no:'2025-005', title:'Establish a Transparency Portal for SPTA records (FOI compliance)', lead:'BoD Riza Obsequio', basis:'FOI Exec. Order No. 2, s. 2016; DepEd Order No. 13, s. 2022 – Sec. 9', status:'Approved'},
-    {no:'2025-006', title:'Formation of SPTA Committees with Defined Roles and Functions', lead:'BoD Jennifer P. Ferrancol', basis:'DepEd Order No. 13, s. 2022 – Sec. 8(d)', status:'Proposed'},
-    {no:'2025-007', title:'Review and Enhancement of Classroom Comfort and Safety (Phase 1)', lead:'Donnabel Lavides', basis:'DepEd Order No. 13, s. 2022 – Sec. 5(c)', status:'Under Review'},
-    {no:'2025-008', title:'Implementation of a Special Project aligned with SPTA priorities', lead:'Dahna Dale R. Pascual', basis:'First SPTA Conference MOM – Item X', status:'Proposed'},
-    {no:'2025-009', title:'Playground Planning and Development (Phase 1 initiation)', lead:'BoDs Pedro L. Siervo, Jr. & Jennifer Ferrancol', basis:'First SPTA Conference MOM – Item b; Child‑Friendly School Policy', status:'Disapproved'},
-    {no:'2025-010', title:'Execution of the First 45‑Day Project Plan (Resos 1–9 framework)', lead:'Pres. Joven Moralejo', basis:'Consolidated basis; DepEd Order No. 13, s. 2022 – Sec. 3(b)', status:'Approved'}
-  ];
+    // --- Display data for the table (edit as needed) ---
+    const resolutionsData = [
+      {no:'2025-001', title:'SPTA Records Turnover Request Resolution', lead:'VP Grace Echavia', basis:'DepEd Order No. 13, s. 2022 – Sec. 7(a)'},
+      {no:'2025-002', title:'Creation of a New SPTA By-Laws', lead:'VP Grace Echavia', basis:'DepEd Order No. 13, s. 2022 – Sec. 8(a–c)'},
+      {no:'2025-003', title:'Policy on Voluntary School Contributions (VSCs)', lead:'Treas. Leizelyn Agoy-Agoy', basis:'DepEd Order No. 13, s. 2022 – Sec. 10(a–b)'},
+      {no:'2025-004', title:'Anonymous Feedback/Complaint Form for Parents', lead:'BoD Pedro L. Siervo, Jr.', basis:'DepEd Order No. 13, s. 2022 – Sec. 7(c)'},
+      {no:'2025-005', title:'Establishing the SPTA Records Management and Archiving', lead:'—', basis:'—'},
+      {no:'2025-006', title:'Establishing the SPTA Standing Committees', lead:'BoD Jennifer P. Ferrancol', basis:'DepEd Order No. 13, s. 2022 – Sec. 8(d)'},
+      {no:'2025-007', title:'A Resolution Supporting the ARAL Program in SFES', lead:'Donnabel Lavides', basis:'DepEd Order No. 13, s. 2022 – Sec. 5(c)'},
+      {no:'2025-008', title:'School Facilities and Classroom Comfort Review', lead:'Dahna Dale R. Pascual', basis:'First SPTA Conference MOM – Item X'},
+      {no:'2025-009', title:'Supporting the Construction of Playground within School', lead:'BoDs Pedro L. Siervo, Jr. & Jennifer Ferrancol', basis:'MOM – Item b; Child-Friendly School Policy'},
+      {no:'2025-010', title:'SPTA First 90-Day Plan', lead:'—', basis:'—'},
+      {no:'2025-011', title:'Initial List of SPTA Projects', lead:'—', basis:'—'}
+    ];
 
-  function populateResoTable(tableId, rows){
-    const tbody = document.querySelector(`#${tableId} tbody`);
-    if(!tbody) return;
-    tbody.innerHTML = '';
-    if(!rows || rows.length===0){
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td colspan="4" class="text-center text-muted">No items yet.</td>`;
-      tbody.appendChild(tr);
-      return;
+    // Exact filenames in assets/resolutions/ (from your repo screenshot)
+    const fileIndex = {
+      '2025-001': 'P-SPTA Resolution 0001, S. 2025 - SPTA Records Turnover Request Resolution.pdf',
+      '2025-002': 'P-SPTA Resolution 0002, S. 2025 - Creation of a New SPTA By-Laws.pdf',
+      '2025-003': 'P-SPTA Resolution 0003, S. 2025 - Policy on Voluntary School Contributions (VSCs).pdf',
+      '2025-004': 'P-SPTA Resolution 0004, S. 2025 - A Resolution Supporting the Anonymous Feedback Form to Parents.pdf',
+      '2025-005': 'P-SPTA Resolution 0005, S. 2025 - Establishing the SPTA Records Management and Archiving.pdf',
+      '2025-006': 'P-SPTA Resolution 0006, S. 2025 - Establishing the SPTA Standing Committees.pdf',
+      '2025-007': 'P-SPTA Resolution 0007, S. 2025 - A Resolution Supporting the ARAL Program in SFES.pdf',
+      '2025-008': 'P-SPTA Resolution 0008, S. 2025 - School Facilities and Classroom Comfort Review.pdf',
+      '2025-009': 'P-SPTA Resolution 0009, S. 2025 - Supporting the Construction of Playground within School.pdf',
+      '2025-010': 'P-SPTA Resolution 0010, S. 2025 - SPTA First 90-Day Plan.pdf',
+      '2025-011': 'P-SPTA Resolution 0011, S. 2025 - Initial List of SPTA Projects.pdf'
+    };
+
+    function pdfHref(resoNo){
+      const file = fileIndex[resoNo];
+      return file ? `assets/resolutions/${encodeURI(file)}` : null;
     }
-    rows.forEach(r=>{
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${r.no}</td><td>${r.title}</td><td>${r.lead}</td><td>${r.basis}</td>`;
-      tbody.appendChild(tr);
+
+    function populateResoTable(tableId, rows){
+      const tbody = document.querySelector(`#${tableId} tbody`);
+      if(!tbody) return;
+      tbody.innerHTML = '';
+      if(!rows || rows.length===0){
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No items yet.</td></tr>`;
+        return;
+      }
+      rows.forEach(r=>{
+        const href = pdfHref(r.no);
+        const titleHtml = href
+          ? `<a href="${href}" target="_blank" rel="noopener">${r.title}</a>`
+          : r.title;
+        tbody.insertAdjacentHTML('beforeend',
+          `<tr>
+            <td>${r.no}</td>
+            <td>${titleHtml}</td>
+            <td>${r.lead || ''}</td>
+            <td>${r.basis || ''}</td>
+          </tr>`);
+      });
+    }
+
+    // Render: ALL items go to "Proposed"; others empty
+    function renderResolutionTables(){
+      populateResoTable('tbl-proposed', resolutionsData);
+      ['tbl-review','tbl-approved','tbl-disapproved'].forEach(id => populateResoTable(id, []));
+    }
+
+    document.addEventListener('DOMContentLoaded',()=>{
+      document.getElementById('year').textContent = new Date().getFullYear();
+      renderResolutionTables();
     });
-  }
-
-  function renderResolutionTables(){
-    const byStatus = { 'Proposed':[], 'Under Review':[], 'Approved':[], 'Disapproved':[] };
-    resolutionsData.forEach(r=>{ if(byStatus[r.status]) byStatus[r.status].push(r); });
-    populateResoTable('tbl-proposed', byStatus['Proposed']);
-    populateResoTable('tbl-review', byStatus['Under Review']);
-    populateResoTable('tbl-approved', byStatus['Approved']);
-    populateResoTable('tbl-disapproved', byStatus['Disapproved']);
-  }
-
-  document.addEventListener('DOMContentLoaded',()=>{
-    document.getElementById('year').textContent = new Date().getFullYear();
-    renderResolutionTables();
-  });
-</script>
+  </script>
 </body>
 </html>
