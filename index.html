@@ -17,13 +17,9 @@
     .nav-vert .nav-link{border-radius:.75rem;text-align:left}
     .nav-vert .nav-link.active{background:var(--brand);color:#fff}
 
-    /* Mobile hamburger over hero */
-    .mobile-menu-btn{
-      position:fixed;top:16px;right:16px;z-index:1060;
-      box-shadow:0 8px 20px rgba(0,0,0,.25);border-radius:.75rem
-    }
+    /* Hamburger icon bars use currentColor so it adapts to any btn variant */
     .mobile-bars,.mobile-bars::before,.mobile-bars::after{
-      display:block;width:22px;height:2px;background:#fff;position:relative;border-radius:2px
+      display:block;width:22px;height:2px;background:currentColor;position:relative;border-radius:2px
     }
     .mobile-bars::before,.mobile-bars::after{content:"";position:absolute;left:0}
     .mobile-bars::before{top:-6px}.mobile-bars::after{top:6px}
@@ -32,21 +28,23 @@
   </style>
 </head>
 <body>
-  <!-- Top Bar / Brand (no links, no toggler) -->
-  <header class="bg-white border-bottom sticky-top">
-    <div class="container py-2 d-flex align-items-center">
-      <a class="d-flex align-items-center gap-2 text-decoration-none" href="#">
+  <!-- Top Bar / Brand -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="#">
         <span class="badge text-bg-primary rounded-pill">SPTA</span>
-        <span class="text-dark">
+        <span>
           <div class="fw-bold lh-1">San Francisco Elementary School</div>
           <small class="text-muted">Kiko Rosa, Brgy. San Francisco, General Trias City</small>
         </span>
       </a>
+      <!-- (Optional) collapsed links on xs only; hidden on lg+ already -->
+      <div class="collapse navbar-collapse d-lg-none" id="topNav"></div>
     </div>
-  </header>
+  </nav>
 
   <!-- Hero -->
-  <section class="bg-primary text-white py-4 border-bottom position-relative">
+  <section class="bg-primary text-white py-4 border-bottom">
     <div class="container">
       <div class="row align-items-center g-3">
         <div class="col-12 col-lg-8">
@@ -54,18 +52,25 @@
           <p class="mb-0 opacity-75">Real-time view of resolutions, meetings, finances, projects, and documents. Built mobile‑first for parents and guardians.</p>
         </div>
         <div class="col-12 col-lg-4">
-          <form class="d-flex gap-2" onsubmit="event.preventDefault(); /* hook up search later */">
+          <form class="d-flex gap-2" onsubmit="event.preventDefault(); doGlobalSearch && doGlobalSearch()">
             <input id="searchAll" type="search" class="form-control" placeholder="Search resolutions, minutes, finances, projects…"/>
             <button class="btn btn-light">Search</button>
           </form>
         </div>
       </div>
     </div>
-    <!-- Mobile hamburger button (over hero) -->
-    <button class="btn btn-dark mobile-menu-btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu" aria-controls="mobileMenu" aria-label="Menu">
-      <span class="mobile-bars"></span>
-    </button>
   </section>
+
+  <!-- Mobile toolbar: Hamburger BETWEEN hero and main -->
+  <div class="bg-white border-bottom d-lg-none">
+    <div class="container py-2 d-flex justify-content-end">
+      <button class="btn btn-outline-secondary" type="button"
+              data-bs-toggle="offcanvas" data-bs-target="#mobileMenu"
+              aria-controls="mobileMenu" aria-label="Open menu">
+        <span class="mobile-bars"></span>
+      </button>
+    </div>
+  </div>
 
   <!-- Offcanvas Mobile Menu -->
   <div class="offcanvas offcanvas-end" tabindex="-1" id="mobileMenu" aria-labelledby="mobileMenuLabel">
@@ -118,11 +123,39 @@
         <!-- Dashboard -->
         <section class="tab-pane fade show active" id="tab-dashboard">
           <div class="row g-3">
-            <!-- KPIs -->
-            <div class="col-6 col-md-3"><div class="card shadow-soft"><div class="card-body"><div class="text-muted small">Balance</div><div class="h4 mb-0" id="kpi-balance">₱29,800</div></div></div></div>
-            <div class="col-6 col-md-3"><div class="card shadow-soft"><div class="card-body"><div class="text-muted small">Total Donations (YTD)</div><div class="h4 mb-0" id="kpi-donations">₱26,200</div></div></div></div>
-            <div class="col-6 col-md-3"><div class="card shadow-soft"><div class="card-body"><div class="text-muted small">Projects Active</div><div class="h4 mb-0" id="kpi-projects">3</div></div></div></div>
-            <div class="col-6 col-md-3"><div class="card shadow-soft"><div class="card-body"><div class="text-muted small">Issues Open</div><div class="h4 mb-0" id="kpi-issues">0</div></div></div></div>
+            <!-- KPIs (center on mobile, left on md+) -->
+            <div class="col-6 col-md-3">
+              <div class="card shadow-soft">
+                <div class="card-body text-center text-md-start">
+                  <div class="text-muted small">Balance</div>
+                  <div class="h4 mb-0" id="kpi-balance">₱29,800</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="card shadow-soft">
+                <div class="card-body text-center text-md-start">
+                  <div class="text-muted small">Total Donations (YTD)</div>
+                  <div class="h4 mb-0" id="kpi-donations">₱26,200</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="card shadow-soft">
+                <div class="card-body text-center text-md-start">
+                  <div class="text-muted small">Projects Active</div>
+                  <div class="h4 mb-0" id="kpi-projects">3</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="card shadow-soft">
+                <div class="card-body text-center text-md-start">
+                  <div class="text-muted small">Issues Open</div>
+                  <div class="h4 mb-0" id="kpi-issues">0</div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="row g-3 mt-1">
