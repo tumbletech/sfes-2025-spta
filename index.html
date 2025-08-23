@@ -16,46 +16,34 @@
     .sidebar-sticky{position:sticky;top:84px}
     .nav-vert .nav-link{border-radius:.75rem;text-align:left}
     .nav-vert .nav-link.active{background:var(--brand);color:#fff}
+
     /* Mobile hamburger over hero */
-    .mobile-menu-btn{position:fixed;top:16px;right:16px;z-index:1060;box-shadow:0 8px 20px rgba(0,0,0,.25);border-radius:.75rem}
-    .mobile-bars,.mobile-bars::before,.mobile-bars::after{display:block;width:22px;height:2px;background:#fff;position:relative;border-radius:2px}
+    .mobile-menu-btn{
+      position:fixed;top:16px;right:16px;z-index:1060;
+      box-shadow:0 8px 20px rgba(0,0,0,.25);border-radius:.75rem
+    }
+    .mobile-bars,.mobile-bars::before,.mobile-bars::after{
+      display:block;width:22px;height:2px;background:#fff;position:relative;border-radius:2px
+    }
     .mobile-bars::before,.mobile-bars::after{content:"";position:absolute;left:0}
     .mobile-bars::before{top:-6px}.mobile-bars::after{top:6px}
-    @media (max-width: 991.98px){
-      .navbar-collapse{background:#fff;padding:1rem;border-radius:.75rem;box-shadow:0 8px 20px rgba(0,0,0,.1)}
-    }
+
     @media print{.no-print{display:none!important}body{background:#fff}}
   </style>
 </head>
 <body>
-  <!-- Top Bar / Brand -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
-    <div class="container">
-      <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+  <!-- Top Bar / Brand (no links, no toggler) -->
+  <header class="bg-white border-bottom sticky-top">
+    <div class="container py-2 d-flex align-items-center">
+      <a class="d-flex align-items-center gap-2 text-decoration-none" href="#">
         <span class="badge text-bg-primary rounded-pill">SPTA</span>
-        <span>
+        <span class="text-dark">
           <div class="fw-bold lh-1">San Francisco Elementary School</div>
           <small class="text-muted">Kiko Rosa, Brgy. San Francisco, General Trias City</small>
         </span>
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNav" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="topNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link active" data-bs-toggle="pill" href="#tab-dashboard">Dashboard</a></li>
-          <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#tab-resolutions">Resolutions</a></li>
-          <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#tab-meetings">Meetings & Minutes</a></li>
-          <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#tab-finance">Financials</a></li>
-          <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#tab-projects">Projects</a></li>
-          <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#tab-log">Transparency Log</a></li>
-          <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#tab-officers">Officers & Signatures</a></li>
-          <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#tab-docs">Documents</a></li>
-          <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#tab-feedback">Feedback</a></li>
-        </ul>
-      </div>
     </div>
-  </nav>
+  </header>
 
   <!-- Hero -->
   <section class="bg-primary text-white py-4 border-bottom position-relative">
@@ -66,7 +54,7 @@
           <p class="mb-0 opacity-75">Real-time view of resolutions, meetings, finances, projects, and documents. Built mobile‑first for parents and guardians.</p>
         </div>
         <div class="col-12 col-lg-4">
-          <form class="d-flex gap-2" onsubmit="event.preventDefault(); doGlobalSearch()">
+          <form class="d-flex gap-2" onsubmit="event.preventDefault(); /* hook up search later */">
             <input id="searchAll" type="search" class="form-control" placeholder="Search resolutions, minutes, finances, projects…"/>
             <button class="btn btn-light">Search</button>
           </form>
@@ -288,22 +276,34 @@
       financeOpening: 15000,
       finance:{
         2025:{
-          income:[{date:'2025-06-15',source:'Parents Donations',ref:'#DON-001',amount:8000},{date:'2025-07-05',source:'Bake Sale',ref:'#INC-004',amount:6200},{date:'2025-08-02',source:'Private Sponsor',ref:'#SPN-002',amount:12000}],
-          expenses:[{date:'2025-07-10',purpose:'Electric Fans (2)',ref:'#EXP-013',amount:4800},{date:'2025-07-22',purpose:'Printer Ink & Paper',ref:'#EXP-017',amount:1200},{date:'2025-08-08',purpose:'Lighting Upgrade',ref:'#EXP-021',amount:5400}]
+          income:[
+            {date:'2025-06-15',source:'Parents Donations',ref:'#DON-001',amount:8000},
+            {date:'2025-07-05',source:'Bake Sale',ref:'#INC-004',amount:6200},
+            {date:'2025-08-02',source:'Private Sponsor',ref:'#SPN-002',amount:12000}
+          ],
+          expenses:[
+            {date:'2025-07-10',purpose:'Electric Fans (2)',ref:'#EXP-013',amount:4800},
+            {date:'2025-07-22',purpose:'Printer Ink & Paper',ref:'#EXP-017',amount:1200},
+            {date:'2025-08-08',purpose:'Lighting Upgrade',ref:'#EXP-021',amount:5400}
+          ]
         }
       }
     };
 
-    const peso = n=>`₱${(n||0).toLocaleString('en-PH',{maximumFractionDigits:0})}`;
+    const peso = n => `₱${(n||0).toLocaleString('en-PH',{maximumFractionDigits:0})}`;
 
     function init(){
-      document.getElementById('year').textContent=new Date().getFullYear();
-      // Finance populate
-      const yearSel=document.getElementById('financeYear');
-      Object.keys(state.finance).forEach(y=>{const o=document.createElement('option');o.value=y;o.textContent=y;yearSel.appendChild(o);});
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      // Populate finance year
+      const yearSel = document.getElementById('financeYear');
+      Object.keys(state.finance).forEach(y=>{
+        const o=document.createElement('option'); o.value=y; o.textContent=y; yearSel.appendChild(o);
+      });
       yearSel.value='2025';
       renderFinance();
-      // Smooth sync when clicking links inside offcanvas
+
+      // Keep sidebar buttons marked active when picking from offcanvas
       document.querySelectorAll('#mobileMenu [data-bs-toggle="pill"]').forEach(a=>{
         a.addEventListener('click',()=>{
           const target=a.getAttribute('href');
@@ -314,12 +314,22 @@
 
     function renderFinance(){
       const y=document.getElementById('financeYear').value;
-      const income=state.finance[y]?.income||[];const expenses=state.finance[y]?.expenses||[];
-      const incT=document.querySelector('#incomeTable tbody');incT.innerHTML='';
-      const expT=document.querySelector('#expenseTable tbody');expT.innerHTML='';
-      income.sort((a,b)=>a.date.localeCompare(b.date)).forEach(r=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${r.date}</td><td>${r.source}</td><td>${r.ref}</td><td class='text-end'>${r.amount.toLocaleString('en-PH')}</td>`;incT.appendChild(tr);});
-      expenses.sort((a,b)=>a.date.localeCompare(b.date)).forEach(r=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${r.date}</td><td>${r.purpose}</td><td>${r.ref}</td><td class='text-end'>${r.amount.toLocaleString('en-PH')}</td>`;expT.appendChild(tr);});
-      const inc=income.reduce((a,b)=>a+b.amount,0);const exp=expenses.reduce((a,b)=>a+b.amount,0);
+      const income=state.finance[y]?.income||[];
+      const expenses=state.finance[y]?.expenses||[];
+      const incT=document.querySelector('#incomeTable tbody'); incT.innerHTML='';
+      const expT=document.querySelector('#expenseTable tbody'); expT.innerHTML='';
+      income.sort((a,b)=>a.date.localeCompare(b.date)).forEach(r=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td>${r.date}</td><td>${r.source}</td><td>${r.ref}</td><td class='text-end'>${r.amount.toLocaleString('en-PH')}</td>`;
+        incT.appendChild(tr);
+      });
+      expenses.sort((a,b)=>a.date.localeCompare(b.date)).forEach(r=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td>${r.date}</td><td>${r.purpose}</td><td>${r.ref}</td><td class='text-end'>${r.amount.toLocaleString('en-PH')}</td>`;
+        expT.appendChild(tr);
+      });
+      const inc=income.reduce((a,b)=>a+b.amount,0);
+      const exp=expenses.reduce((a,b)=>a+b.amount,0);
       document.getElementById('financeOpening').textContent=peso(state.financeOpening);
       document.getElementById('financeNet').textContent=peso(inc-exp);
       document.getElementById('financeCurrent').textContent=peso(state.financeOpening+inc-exp);
