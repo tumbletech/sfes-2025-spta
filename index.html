@@ -162,10 +162,10 @@
             <div class="col-12 col-xl-8">
               <div class="card shadow-soft"><div class="card-body">
                 <h2 class="h6 section-title mb-3">Announcements</h2>
-                <ul class="list-group list-group-flush" id="highlightsList">
-                  
-                </ul>
-              </div></div>
+                  <ul class="list-group list-group-flush" id="announcementsList">
+                  </ul>
+                </div>
+              </div>
             </div>
             <div class="col-12 col-xl-4">
               <div class="card shadow-soft"><div class="card-body">
@@ -368,5 +368,32 @@
 
     document.addEventListener('DOMContentLoaded',init);
   </script>
+  <script>
+  const state = {
+    announcements: [
+      { text: 'Lighting Upgrade – Wing A is 68% complete; before/after lux readings next week.', link:'#tab-projects' },
+      { text: 'Online Parents’ Suggestion & Complaints form approved on 2025-08-05.',         link:'#tab-resolutions' },
+      { text: 'YTD donations: ₱26,200; thank you to our sponsors!',                           link:'#tab-finance' }
+    ]
+  };
+
+  function renderAnnouncements(){
+    const ul = document.getElementById('announcementsList');
+    ul.innerHTML = '';
+    state.announcements.forEach(a => {
+      const li = document.createElement('li');
+      li.className = 'list-group-item d-flex justify-content-between align-items-start';
+      li.innerHTML = `<span>${a.text}</span>
+                      <a class="btn btn-sm btn-outline-primary" href="${a.link}" data-bs-toggle="pill">Open</a>`;
+      ul.appendChild(li);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // ...your other init code...
+    renderAnnouncements();   // call this instead of any old renderHighlights()
+  });
+</script>
+
 </body>
 </html>
