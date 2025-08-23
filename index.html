@@ -29,6 +29,11 @@
       .sidebar-col{max-width:280px}
     }
     @media print{ .no-print{display:none!important} .print-show{display:block!important} body{background:#fff} }
+      /* Mobile-specific polish */
+    @media (max-width: 991.98px){
+      .kpi .h4{font-size:1.25rem}
+      #portalTabsMobile .nav-link{padding:.5rem .9rem}
+    }
   </style>
 </head>
 <body>
@@ -66,7 +71,7 @@
       </div>
 
       <!-- Mobile nav pills under hero -->
-      <div class="bg-white border rounded-3 mt-3 p-2 d-lg-none">
+      <div class="bg-white border rounded-3 mt-3 p-2 shadow-soft d-lg-none">
         <ul class="nav nav-pills overflow-auto" id="portalTabsMobile" role="tablist">
           <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-dashboard" type="button">Dashboard</button></li>
           <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-resolutions" type="button">Resolutions</button></li>
