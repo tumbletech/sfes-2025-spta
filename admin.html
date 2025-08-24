@@ -39,11 +39,38 @@
           <small class="text-muted">Manage data for the public portal</small>
         </div>
       </div>
-      <div class="d-flex gap-2">
+      <div class="d-flex flex-wrap gap-2">
         <button id="btnExportJSON" class="btn btn-outline-primary btn-sm">Export JSON</button>
         <button id="btnImportJSON" class="btn btn-outline-secondary btn-sm">Import JSON</button>
-        <button id="btnPortalSnippet" class="btn btn-primary btn-sm">Export Portal JS Snippet</button>
+        <button id="btnPortalSnippet" class="btn btn-outline-dark btn-sm">Export Portal JS Snippet</button>
+        <button id="btnSyncMake" class="btn btn-success btn-sm">Sync to Cloud</button>
+        <button id="btnLogout" class="btn btn-outline-danger btn-sm">Logout</button>
         <input id="importFile" type="file" accept=".json" hidden>
+      </div>
+    </div>
+  </div>
+
+  <!-- Auth Overlay -->
+  <div id="authOverlay" class="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-dark bg-opacity-50" style="z-index: 2000; display:none;">
+    <div class="card shadow-soft" style="max-width:420px;width:92%;">
+      <div class="card-body">
+        <h5 class="mb-2">Admin Login</h5>
+        <p class="text-muted small mb-3">Sign in with a one-time code sent to your email.</p>
+
+        <div id="authStepEmail">
+          <label class="form-label">Email</label>
+          <input id="authEmail" type="email" class="form-control" placeholder="you@school.edu">
+          <button id="btnSendCode" class="btn btn-primary w-100 mt-3">Send code</button>
+        </div>
+
+        <div id="authStepCode" class="d-none">
+          <label class="form-label">Enter 6-digit code</label>
+          <input id="authCode" inputmode="numeric" pattern="[0-9]*" maxlength="6" class="form-control" placeholder="123456">
+          <button id="btnVerifyCode" class="btn btn-success w-100 mt-3">Verify & Sign in</button>
+          <button id="btnBackEmail" class="btn btn-link w-100 mt-2">Use a different email</button>
+        </div>
+
+        <div id="authMsg" class="small mt-3" style="min-height:1.25rem;"></div>
       </div>
     </div>
   </div>
@@ -86,7 +113,7 @@
                 <li>Add your data in each section (Announcements, Resolutions, Finance, Officers).</li>
                 <li>Use <strong>Export JSON</strong> to save a <code>spta-data.json</code> backup.</li>
                 <li>Use <strong>Export Portal JS Snippet</strong> and paste into your public site while you’re not yet fetching JSON.</li>
-                <li>Later, you can load <code>spta-data.json</code> via fetch() in the public portal.</li>
+                <li>Click <strong>Sync to Cloud</strong> to trigger your Make scenario (Drive/GitHub updates, notifications, etc.).</li>
               </ol>
             </div>
           </div>
@@ -365,7 +392,109 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // ------------- Persistence -------------
+    /* ===========================
+       Make.com Passwordless Auth
+       =========================== */
+    // REPLACE these with your Make webhook URLs:
+    const AUTH_REQUEST_URL = 'https://hook.make.com/REPLACE_WITH_auth_request';
+    const AUTH_VERIFY_URL  = 'https://hook.make.com/REPLACE_WITH_auth_verify';
+    const MAKE_SYNC_URL    = 'https://hook.make.com/REPLACE_WITH_sync';
+
+    const SESSION_KEY = 'spta_admin_session_v1'; // {token, expISO, email}
+
+    function getSession(){
+      try { return JSON.parse(localStorage.getItem(SESSION_KEY) || '{}'); } catch { return {}; }
+    }
+    function setSession(obj){ localStorage.setItem(SESSION_KEY, JSON.stringify(obj||{})); }
+    function clearSession(){ localStorage.removeItem(SESSION_KEY); }
+    function isSessionValid(sess){
+      if(!sess || !sess.token || !sess.expISO) return false;
+      return new Date(sess.expISO).getTime() > Date.now() + 30*1000; // 30s skew
+    }
+
+    const $ = (s)=>document.querySelector(s);
+    function showAuth(show){
+      $('#authOverlay').style.display = show ? 'flex' : 'none';
+      const msg = $('#authMsg'); if(msg){ msg.textContent = ''; msg.className = 'small mt-3'; }
+      if(show){
+        $('#authStepEmail').classList.remove('d-none');
+        $('#authStepCode').classList.add('d-none');
+        $('#authEmail') && $('#authEmail').focus();
+      }
+    }
+
+    async function authedFetch(url, opts={}){
+      const sess = getSession();
+      if(!isSessionValid(sess)) { showAuth(true); throw new Error('Not authenticated'); }
+      opts.headers = Object.assign({}, opts.headers, { 'Authorization': `Bearer ${sess.token}` });
+      return fetch(url, opts);
+    }
+
+    // Wire login flow
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const sess = getSession();
+      showAuth(!isSessionValid(sess));
+
+      $('#btnSendCode').addEventListener('click', async ()=>{
+        const email = ($('#authEmail').value||'').trim().toLowerCase();
+        const msg = $('#authMsg');
+        if(!email){ msg.textContent = 'Please enter your email.'; msg.classList.add('text-danger'); return; }
+        try{
+          const res = await fetch(AUTH_REQUEST_URL, {
+            method:'POST',
+            headers:{ 'Content-Type':'application/json' },
+            body: JSON.stringify({ email })
+          });
+          const json = await res.json().catch(()=>({}));
+          if(!res.ok || !json.ok){ throw new Error(json.error || 'Failed sending code'); }
+          $('#authStepEmail').classList.add('d-none');
+          $('#authStepCode').classList.remove('d-none');
+          $('#authCode').focus();
+          msg.textContent = 'Code sent. Check your inbox.'; msg.classList.add('text-success'); msg.classList.remove('text-danger');
+          sessionStorage.setItem('auth_email', email);
+        }catch(err){
+          msg.textContent = err.message || 'Could not send code.'; msg.classList.add('text-danger'); msg.classList.remove('text-success');
+        }
+      });
+
+      $('#btnVerifyCode').addEventListener('click', async ()=>{
+        const email = sessionStorage.getItem('auth_email') || ($('#authEmail').value||'').trim().toLowerCase();
+        const code  = ($('#authCode').value||'').trim();
+        const msg = $('#authMsg');
+        if(!email || code.length !== 6){ msg.textContent = 'Enter the 6-digit code.'; msg.classList.add('text-danger'); return; }
+        try{
+          const res = await fetch(AUTH_VERIFY_URL, {
+            method:'POST',
+            headers:{ 'Content-Type':'application/json' },
+            body: JSON.stringify({ email, code })
+          });
+          const json = await res.json().catch(()=>({}));
+          if(!res.ok || !json.ok || !json.token){ throw new Error(json.error || 'Invalid or expired code.'); }
+          setSession({ token: json.token, expISO: json.exp, email });
+          showAuth(false);
+        }catch(err){
+          msg.textContent = err.message || 'Verification failed.'; msg.classList.add('text-danger'); msg.classList.remove('text-success');
+        }
+      });
+
+      $('#btnBackEmail').addEventListener('click', ()=>{
+        $('#authStepCode').classList.add('d-none');
+        $('#authStepEmail').classList.remove('d-none');
+        $('#authMsg').textContent = '';
+      });
+
+      // Logout
+      $('#btnLogout').addEventListener('click', ()=>{
+        clearSession();
+        showAuth(true);
+      });
+    });
+  </script>
+
+  <script>
+    /* ===========================
+       Data Store + CRUD (unchanged)
+       =========================== */
     const LS_KEY = 'spta_admin_store_v1';
 
     const defaultStore = () => ({
@@ -395,7 +524,7 @@
       saveStore(); renderAudit();
     }
 
-    // ------------- Utilities -------------
+    // Utils
     const peso = n => `₱${(Number(n)||0).toLocaleString('en-PH',{maximumFractionDigits:0})}`;
     const fmtDate = d => d || '';
     function download(filename, text){
@@ -405,7 +534,7 @@
       URL.revokeObjectURL(url);
     }
 
-    // ------------- KPIs / Overview -------------
+    // KPIs
     function refreshKPIs(){
       document.getElementById('kpi-ann').textContent = STORE.announcements.length;
       document.getElementById('kpi-reso').textContent = STORE.resolutions.length;
@@ -416,12 +545,10 @@
       document.getElementById('cfgAdminName').value = STORE.config.adminName || '';
     }
 
-    // ------------- Announcements -------------
+    // Announcements CRUD
     function openAnnForm(){ document.getElementById('annForm').classList.remove('d-none'); }
     function cancelAnn(){ document.getElementById('annForm').classList.add('d-none'); clearAnnForm(); }
-    function clearAnnForm(){
-      ['annTitle','annLink','annBody','annDate','annIdx'].forEach(id=>document.getElementById(id).value='');
-    }
+    function clearAnnForm(){ ['annTitle','annLink','annBody','annDate','annIdx'].forEach(id=>document.getElementById(id).value=''); }
     function saveAnn(){
       const title = document.getElementById('annTitle').value.trim();
       if(!title){ alert('Title is required'); return; }
@@ -465,7 +592,7 @@
       });
     }
 
-    // ------------- Resolutions -------------
+    // Resolutions CRUD
     function openResoForm(){ document.getElementById('resoForm').classList.remove('d-none'); }
     function cancelReso(){ document.getElementById('resoForm').classList.add('d-none'); clearResoForm(); }
     function clearResoForm(){
@@ -528,7 +655,7 @@
       });
     }
 
-    // ------------- Finance -------------
+    // Finance CRUD
     function saveOpening(){
       const v = Number(document.getElementById('finOpening').value||0);
       STORE.finance.opening = v; saveStore(); log(`Updated opening balance to ${peso(v)}`);
@@ -635,7 +762,7 @@
       });
     }
 
-    // ------------- Officers -------------
+    // Officers
     function openOfficerForm(){ document.getElementById('offForm').classList.remove('d-none'); }
     function cancelOfficer(){ document.getElementById('offForm').classList.add('d-none'); clearOfficerForm(); }
     function clearOfficerForm(){ ['offName','offRole','offPhoto','offIdx'].forEach(id=>document.getElementById(id).value=''); }
@@ -680,7 +807,7 @@
       });
     }
 
-    // ------------- Settings / Audit -------------
+    // Settings / Audit
     function saveSettings(){
       STORE.config.pdfBase = document.getElementById('cfgPdfBase').value.trim() || 'assets/resolutions/';
       STORE.config.adminName = document.getElementById('cfgAdminName').value.trim() || 'Admin';
@@ -694,7 +821,7 @@
       });
     }
 
-    // ------------- Import / Export -------------
+    // Import / Export / Snippet
     document.getElementById('btnExportJSON').addEventListener('click', ()=>{
       download('spta-data.json', JSON.stringify(STORE, null, 2));
     });
@@ -704,7 +831,7 @@
       const text = await file.text();
       try{
         const data = JSON.parse(text);
-        STORE = Object.assign(defaultStore(), data); // fill missing keys
+        STORE = Object.assign(defaultStore(), data);
         saveStore();
         renderAll();
         alert('Import successful.');
@@ -713,27 +840,21 @@
       e.target.value='';
     });
 
-    // Generate a drop-in snippet for the current public portal
     document.getElementById('btnPortalSnippet').addEventListener('click', ()=>{
       const pdfBase = STORE.config.pdfBase || 'assets/resolutions/';
-      // Build resolutionsData & fileIndex the public portal expects
       const resolutionsData = STORE.resolutions.map(r => ({
         no: r.no, title: r.title, lead: r.lead, basis: r.basis
       })).sort((a,b)=> (a.no||'').localeCompare(b.no||''));
-
       const fileIndex = {};
       STORE.resolutions.forEach(r=>{
         if(r.no && r.pdf){
           const fn = r.pdf.startsWith('http') ? r.pdf : (r.pdf.startsWith('assets/') ? r.pdf : pdfBase + r.pdf);
-          // if relative, keep filename only for portal mapping convenience
           const onlyName = fn.split('/').pop();
           fileIndex[r.no] = onlyName;
         }
       });
-
       const officers = STORE.officers;
       const announcements = STORE.announcements;
-
       const snippet = `// ---- Generated by Admin ----
 const resolutionsData = ${JSON.stringify(resolutionsData, null, 2)};
 
@@ -742,7 +863,6 @@ const fileIndex = ${JSON.stringify(fileIndex, null, 2)};
 // Optional (if your portal reads these):
 const officers = ${JSON.stringify(officers, null, 2)};
 const announcementsData = ${JSON.stringify(announcements, null, 2)};`;
-
       document.getElementById('snippetArea').value = snippet;
       const modal = new bootstrap.Modal('#snippetModal'); modal.show();
     });
@@ -751,7 +871,25 @@ const announcementsData = ${JSON.stringify(announcements, null, 2)};`;
       ta.select(); document.execCommand('copy');
     }
 
-    // ------------- Rendering -------------
+    // ---- Sync to Cloud (Make.com) ----
+    document.getElementById('btnSyncMake').addEventListener('click', async ()=>{
+      try{
+        const res = await authedFetch(MAKE_SYNC_URL, {
+          method:'POST',
+          headers:{ 'Content-Type':'application/json' },
+          body: JSON.stringify(STORE)
+        });
+        if(!res.ok) throw new Error(`HTTP ${res.status}`);
+        log('Synced data to Make.com');
+        alert('Synced to cloud successfully!');
+      }catch(err){
+        console.error(err);
+        alert('Sync failed. Sign in and try again.');
+        showAuth(true);
+      }
+    });
+
+    // Render all
     function renderAll(){
       refreshKPIs();
       renderAnnouncements();
@@ -761,8 +899,6 @@ const announcementsData = ${JSON.stringify(announcements, null, 2)};`;
       renderOfficers();
       renderAudit();
     }
-
-    // Init
     document.addEventListener('DOMContentLoaded', renderAll);
   </script>
 </body>
