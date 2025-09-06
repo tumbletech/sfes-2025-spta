@@ -122,11 +122,68 @@
       <main class="col-12 col-lg-9 tab-content">
         <!-- Dashboard -->
         <section class="tab-pane fade show active" id="tab-dashboard">
+          <!-- KPIs -->
           <div class="row g-3">
-            <div class="col-6 col-md-3"><div class="card shadow-soft kpi"><div class="card-body"><div class="text-muted small">Total Dues Collected</div><div class="h4 mb-0" id="kpi-balance">₱17,106.00</div></div></div></div>
-            <div class="col-6 col-md-3"><div class="card shadow-soft kpi"><div class="card-body"><div class="text-muted small">Total Cash in Hand (YTD)</div><div class="h4 mb-0" id="kpi-donations">₱17,106.00</div></div></div></div>
-            <div class="col-6 col-md-3"><div class="card shadow-soft kpi"><div class="card-body"><div class="text-muted small">Projects Active</div><div class="h4 mb-0" id="kpi-projects">0</div></div></div></div>
-            <div class="col-6 col-md-3"><div class="card shadow-soft kpi"><div class="card-body"><div class="text-muted small">Issues Open</div><div class="h4 mb-0" id="kpi-issues">0</div></div></div></div>
+            <div class="col-6 col-md-3">
+              <div class="card shadow-soft kpi">
+                <div class="card-body">
+                  <div class="text-muted small">Total Dues Collected</div>
+                  <div class="h4 mb-0" id="kpi-balance">₱17,106.00</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="card shadow-soft kpi">
+                <div class="card-body">
+                  <div class="text-muted small">Total Cash in Hand (YTD)</div>
+                  <div class="h4 mb-0" id="kpi-donations">₱17,106.00</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="card shadow-soft kpi">
+                <div class="card-body">
+                  <div class="text-muted small">Projects Active</div>
+                  <div class="h4 mb-0" id="kpi-projects">0</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="card shadow-soft kpi">
+                <div class="card-body">
+                  <div class="text-muted small">Issues Open</div>
+                  <div class="h4 mb-0" id="kpi-issues">0</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dues PDF viewer -->
+          <div class="card shadow-soft mt-3">
+            <div class="card-body">
+              <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2">
+                <h2 class="h6 section-title mb-0">SPTA Dues — Detail Table (as of Sept 5, 2025)</h2>
+                <a class="btn btn-sm btn-outline-primary"
+                   href="assets/spta-dues/SPTA-Dues-Sept-5-2025.pdf"
+                   target="_blank" rel="noopener">
+                  Open PDF in New Tab
+                </a>
+              </div>
+        
+              <!-- Inline viewer -->
+              <div class="mt-3">
+                <iframe
+                  class="pdf-frame"
+                  title="SPTA Dues Table"
+                  src="assets/spta-dues/SPTA-Dues-Sept-5-2025.pdf#view=FitH&navpanes=0">
+                </iframe>
+              </div>
+        
+              <!-- Mobile fallback note (some iOS versions prefer opening in a new tab) -->
+              <p class="small text-muted mt-2 d-md-none">
+                If the table doesn’t load on your phone, tap “Open PDF in New Tab” above.
+              </p>
+            </div>
           </div>
         </section>
 
