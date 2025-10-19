@@ -622,41 +622,38 @@
   // Resolutions data
   // -----------------
   const resolutionsApproved = [
-      {
-        no:'RESO-2025-01',
-        title:'Voluntary School Contribution',
-        dcno:'SPTA-RESO-2025-001 V001',
-        date:'Aug 28, 2025',
-        file:'assets/resolutions/approved/RESO-2025-01%20-%20Voluntary%20School%20Contribution.pdf'
-      }
-    ];
-
-  const resolutionsPending = [
-      {
-        no: 'RESO-2025-02',
-        title: 'Adopting the SPTA By-Laws',
-        dcno: 'SPTA-RESO-2025-002 V001',
-        date: 'Oct 18, 2025',
-        pending: ['Secretary', 'BoD-LSEN'], // edit who still needs to sign
-        file: 'assets/resolutions/approved-pending-signatures/RESO-2025-02%20-%20Adopting%20the%20SPTA%20By%20Laws.pdf'
-      }
-    ];
-
-  
-    // define these (even empty) to avoid ReferenceErrors
-    const resolutionsPending = [];   // e.g. { no:'RESO-2025-02', title:'…', dcno:'…', date:'…', pending:['President'], file:'...' }
-    const resolutionsProposed = [];  // e.g. { no:'RESO-2025-03', title:'…', proposedBy:'…', date:'…', draft:'...' }
-  
+          {
+            no:'RESO-2025-01',
+            title:'Voluntary School Contribution',
+            dcno:'SPTA-RESO-2025-001 V001',
+            date:'Aug 28, 2025',
+            file:'assets/resolutions/approved/RESO-2025-01%20-%20Voluntary%20School%20Contribution.pdf'
+          }
+        ];
+    
+      const resolutionsPending = [
+          {
+            no: 'RESO-2025-02',
+            title: 'Adopting the SPTA By-Laws',
+            dcno: 'SPTA-RESO-2025-002 V001',
+            date: 'Oct 15, 2025',
+            pending: ['Secretary', 'BoD-LSEN'], // edit who still needs to sign
+            file: 'assets/resolutions/approved-pending-signatures/RESO-2025-02%20-%20Adopting%20the%20SPTA%20By%20Laws.pdf'
+          }
+        ];
+    
+      const resolutionsProposed = [];
+    
     function openIfFile(row){
       const href=row.dataset.href;
       if(href){ window.open(href,'_blank','noopener'); }
     }
-  
+    
     function renderResolutions(){
       const tA=document.getElementById('tblApproved');
       const tP=document.getElementById('tblPending');
       const tR=document.getElementById('tblProposed');
-  
+    
       if(tA){
         tA.innerHTML = resolutionsApproved.map(r=>`
           <tr class="click-row" data-href="${r.file||''}" onclick="openIfFile(this)">
@@ -667,22 +664,21 @@
             <td>${r.file?'<i class="bi bi-file-earmark-pdf"></i>':''}</td>
           </tr>`).join('');
       }
-  
+    
       if(tP){
-        tP.innerHTML = resolutionsPending.map(r => `
+        tP.innerHTML = resolutionsPending.map(r=>`
           <tr class="click-row" data-href="${r.file||''}" onclick="openIfFile(this)">
             <td>${r.no}</td>
             <td>${r.title}</td>
             <td><span class="badge text-bg-light border res-badge">${r.dcno}</span></td>
             <td>${r.date}</td>
-            <td>${(r.pending||[]).map(p => 
-              `<span class='badge text-bg-warning-subtle border me-1 res-badge'>${p}</span>`).join('')}</td>
-            <td>${r.file ? '<i class="bi bi-file-earmark-pdf"></i>' : ''}</td>
+            <td>${(r.pending||[]).map(p=>`<span class='badge text-bg-warning-subtle border me-1 res-badge'>${p}</span>`).join('')}</td>
+            <td>${r.file?'<i class="bi bi-file-earmark-pdf"></i>':''}</td>
           </tr>`).join('');
       }
-
+    
       if(tR){
-        tR.innerHTML = (resolutionsProposed || []).map(r=>`
+        tR.innerHTML = (resolutionsProposed||[]).map(r=>`
           <tr class="click-row" data-href="${r.draft||''}" onclick="openIfFile(this)">
             <td>${r.no}</td>
             <td>${r.title}</td>
@@ -691,16 +687,6 @@
             <td>${r.draft?'<i class="bi bi-file-earmark-text"></i>':''}</td>
           </tr>`).join('');
       }
-    }
-  
-    function filterRes(){
-      const q=(document.getElementById('resSearch')?.value||'').toLowerCase();
-      ['tblApproved','tblPending','tblProposed'].forEach(id=>{
-        const tbody=document.getElementById(id); if(!tbody) return;
-        [...tbody.querySelectorAll('tr')].forEach(tr=>{
-          tr.style.display = tr.innerText.toLowerCase().includes(q)?'':'none';
-        });
-      });
     }
   
     document.addEventListener('DOMContentLoaded',()=>{
