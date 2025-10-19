@@ -537,6 +537,49 @@
       { no:'Resolution 001', title:'Approval of Initial SPTA Fees for SY 2025–2026', dcno:'SPTA-RES-0001-V001', date:'Aug 30, 2025', file:'assets/resolutions/RES-0001.pdf' }
     ];
 
+    function renderResolutions(){
+      const tA=document.getElementById('tblApproved');
+      const tP=document.getElementById('tblPending');
+      const tR=document.getElementById('tblProposed');
+      if(tA){ tA.innerHTML = resolutionsApproved.map(r=>`
+        <tr class="click-row" data-href="${r.file||''}" onclick="openIfFile(this)">
+          <td>${r.no}</td>
+          <td>${r.title}</td>
+          <td><span class="badge text-bg-light border res-badge">${r.dcno}</span></td>
+          <td>${r.date}</td>
+          <td>${r.file?'<i class="bi bi-file-earmark-pdf"></i>':''}</td>
+        </tr>`).join(''); }
+
+      if(tP){ tP.innerHTML = resolutionsPending.map(r=>`
+        <tr class="click-row" data-href="${r.file||''}" onclick="openIfFile(this)">
+          <td>${r.no}</td>
+          <td>${r.title}</td>
+          <td><span class="badge text-bg-light border res-badge">${r.dcno}</span></td>
+          <td>${r.date}</td>
+          <td>${(r.pending||[]).map(p=>`<span class='badge text-bg-warning-subtle border me-1 res-badge'>${p}</span>`).join('')}</td>
+          <td>${r.file?'<i class="bi bi-file-earmark-text"></i>':''}</td>
+        </tr>`).join(''); }
+
+      if(tR){ tR.innerHTML = resolutionsProposed.map(r=>`
+        <tr class="click-row" data-href="${r.draft||''}" onclick="openIfFile(this)">
+          <td>${r.no}</td>
+          <td>${r.title}</td>
+          <td>${r.proposedBy||''}</td>
+          <td>${r.date}</td>
+          <td>${r.draft?'<i class="bi bi-file-earmark-text"></i>':''}</td>
+        </tr>`).join(''); }
+    }
+
+    function filterRes(){
+      const q=(document.getElementById('resSearch')?.value||'').toLowerCase();
+      ['tblApproved','tblPending','tblProposed'].forEach(id=>{
+        const tbody=document.getElementById(id); if(!tbody) return;
+        [...tbody.querySelectorAll('tr')].forEach(tr=>{
+          tr.style.display = tr.innerText.toLowerCase().includes(q)?'':'none';
+        });
+      });
+    }
+
     document.addEventListener('DOMContentLoaded',()=>{
       document.getElementById('year').textContent=new Date().getFullYear();
       renderOfficers();
