@@ -35,6 +35,52 @@
     @media (min-width: 1200px){
       .news-card .card-img-top{ height: 260px; }
     }
+    /* Kiko.AI Floating Button + Modal */
+    .kiko-fab{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      z-index:1080;
+      border-radius:999px;
+      padding:.75rem 1rem;
+      box-shadow:0 10px 25px rgba(0,0,0,.15);
+    }
+    .kiko-badge{
+      font-size:.75rem;
+      opacity:.85;
+    }
+    .kiko-chat{
+      height:420px;
+      overflow:auto;
+      background:#fff;
+      border:1px solid rgba(0,0,0,.08);
+      border-radius:12px;
+      padding:12px;
+    }
+    .kiko-msg{
+      max-width:85%;
+      padding:.6rem .75rem;
+      border-radius:14px;
+      margin:.35rem 0;
+      line-height:1.35;
+      font-size:.95rem;
+    }
+    .kiko-msg.bot{
+      background:#f1f3f5;
+      border-top-left-radius:6px;
+    }
+    .kiko-msg.user{
+      background:var(--brand);
+      color:#fff;
+      margin-left:auto;
+      border-top-right-radius:6px;
+    }
+    .kiko-meta{
+      font-size:.75rem;
+      color:var(--muted);
+      margin-top:.25rem;
+    }
+
   </style>
 </head>
 <body>
@@ -723,5 +769,147 @@
       }
     });
   </script>
+
+  <!-- Kiko.AI Floating Button -->
+  <button class="btn btn-primary kiko-fab d-flex align-items-center gap-2"
+          type="button"
+          data-bs-toggle="modal"
+          data-bs-target="#kikoModal"
+          aria-label="Open Kiko.AI">
+    <i class="bi bi-chat-dots-fill"></i>
+    <span class="d-none d-sm-inline">Ask Kiko.AI</span>
+  </button>
+  
+  <!-- Kiko.AI Modal -->
+  <div class="modal fade" id="kikoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-md modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <div class="fw-bold">Kiko.AI</div>
+            <div class="kiko-badge text-muted">SFES SPTA AI Assistant</div>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+  
+        <div class="modal-body">
+          <div id="kikoChat" class="kiko-chat"></div>
+          <div class="kiko-meta mt-2">
+            Note: Financial and other documentary records will be posted soon on this portal.
+          </div>
+        </div>
+  
+        <div class="modal-footer">
+          <div class="input-group">
+            <input id="kikoInput" type="text" class="form-control" placeholder="Ask about resolutions, officers, projects..." />
+            <button class="btn btn-primary" id="kikoSendBtn">
+              <i class="bi bi-send-fill"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // -----------------
+    // Kiko.AI Chat Logic
+    // -----------------
+    const KIKO_ENDPOINT = "PUT_YOUR_RELEVANCE_ENDPOINT_HERE"; // <-- replace
+    const KIKO_API_KEY  = ""; // optional, if required by your setup
+    
+    function addMsg(text, who="bot"){
+      const chat = document.getElementById("kikoChat");
+      if(!chat) return;
+      const div = document.createElement("div");
+      div.className = `kiko-msg ${who}`;
+      div.textContent = text;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
+    
+    function kikoWelcomeOnce(){
+      const key = "kiko_welcomed";
+      if(localStorage.getItem(key)) return;
+      localStorage.setItem(key,"1");
+      addMsg("Hello! I’m Kiko.AI, the SFES SPTA AI Assistant. I can guide you through resolutions, officers, and portal documents. What would you like to look for?", "bot");
+    }
+    
+    async function askKiko(userText){
+      // echo user
+      addMsg(userText, "user");
+    
+      // safety: if endpoint not configured, fail gracefully
+      if(!KIKO_ENDPOINT || KIKO_ENDPOINT.includes("PUT_YOUR_RELEVANCE_ENDPOINT_HERE")){
+        addMsg("Kiko.AI is not yet connected to the server endpoint. Please update the KIKO_ENDPOINT in the code.", "bot");
+        return;
+      }
+    
+      try{
+        // you can adjust payload to match your Relevance API
+        const payload = { message: userText };
+    
+        const res = await fetch(KIKO_ENDPOINT, {
+          method: "POST",
+          headers: {
+            "Content-Type":"application/json",
+            ...(KIKO_API_KEY ? {"Authorization":`Bearer ${KIKO_API_KEY}`} : {})
+          },
+          body: JSON.stringify(payload)
+        });
+    
+        if(!res.ok){
+          addMsg("Sorry — I couldn’t reach the server. Please try again in a moment.", "bot");
+          return;
+        }
+    
+        const data = await res.json();
+    
+        // Common patterns: data.output, data.answer, data.response, etc.
+        const answer =
+          data.output ||
+          data.answer ||
+          data.response ||
+          (typeof data === "string" ? data : null) ||
+          "I received a response, but it was in an unexpected format.";
+    
+        addMsg(answer, "bot");
+      }catch(err){
+        addMsg("Connection error. Please try again.", "bot");
+      }
+    }
+    
+    function hookKikoUI(){
+      const input = document.getElementById("kikoInput");
+      const btn   = document.getElementById("kikoSendBtn");
+      const modal = document.getElementById("kikoModal");
+    
+      if(!input || !btn || !modal) return;
+    
+      // Welcome each session when modal opens
+      modal.addEventListener("shown.bs.modal", ()=>{
+        // show a welcome each time, or just once:
+        // kikoWelcomeOnce();
+        // OR always greet:
+        if(!document.getElementById("kikoChat").hasChildNodes()){
+          addMsg("Hello! I’m Kiko.AI, the SFES SPTA AI Assistant. I can guide you through resolutions, officers, and portal documents. What would you like to look for?", "bot");
+        }
+        input.focus();
+      });
+    
+      async function send(){
+        const text = (input.value || "").trim();
+        if(!text) return;
+        input.value = "";
+        await askKiko(text);
+      }
+    
+      btn.addEventListener("click", send);
+      input.addEventListener("keydown", (e)=>{
+        if(e.key === "Enter") send();
+      });
+    }
+
+  </script>
+
 </body>
 </html>
